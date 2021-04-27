@@ -55,3 +55,11 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 9. zwrócenie wszystkich wpisów użytkownika
 10. zwrócenie wpisów obserwowanych danego użytkownika
 11. zwrócenie wpisów z określonego tagu
+
+### Wprowadzenie przykładowych danych do bazy
+
+```cypher
+CREATE (n:User {name: 'Andy', creation_date: '2021-01-10', avatar: 'https://via.placeholder.com/300/09f/fff.png', description: 'the first user!',role: 'none', password_hash: 'none'})
+CREATE (n:User {name: 'Johnny', creation_date: '2021-03-12', avatar: 'https://via.placeholder.com/300/09f/fff.png', description: 'the first user!',role: 'none', password_hash: 'none'})
+CREATE (n:User {name: 'Robert', creation_date: '2020-12-12', avatar: 'https://via.placeholder.com/300/09f/fff.png', description: 'the first user!',role: 'none', password_hash: 'none'})
+```
