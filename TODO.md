@@ -10,3 +10,6 @@
  - pokaż nowe posty, które zostały polubione przez obserwowanych przeze mnie
  - pokaż nowe posty w tagu
  - pokaż posty, które mogłą być interesujące dla mnie (na podstawie lubianych przeze mnie postów w tagach, albo postów lubianych przez obserwowanych przeze mnie)
+ - wyznaczanie popularności używając np. algorytmu PageRank
+ - pokaż polecane posty (wybrać kryterium, wg którego mają być polecane)
+ - polecani znajomi
