@@ -43,6 +43,10 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 - content
 - photo_adress
 
+### Tag
+
+- name
+
 ### Zapytania do bazy (realizowane przez backend; wstępny plan)
 
 1. tworzenie użytkownika
