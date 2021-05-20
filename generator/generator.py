@@ -1,4 +1,4 @@
-from neo4j import GraphDatabase, basic_auth
+from neo4j import GraphDatabase, basic_auth, Result
 from dotenv import load_dotenv
 from faker import Faker
 import os
@@ -49,5 +49,20 @@ def create_fake_post() -> dict:
     return post
 
 
-print(create_fake_user())
-print(create_fake_post())
+def add_user(user: dict) -> Result:
+    return db.run("CREATE (n:User {{name: '{}', creation_date: '{}', avatar: '{}', description: '{}', role: '{}', password_hash: '{}'}})"
+        .format(user['name'], user['creation_date'], user['avatar'], user['description'], user['role'], user['password_hash']))
+
+
+def add_post(post: dict) -> Result:
+    return db.run("CREATE (n:Post {{creation_date: '{}', update_date: '{}', content: '{}', photo_address: '{}'}})"
+        .format(post['creation_date'], post['update_date'], post['content'], post['photo_address']))
+
+
+for _ in range(25):
+    add_user(create_fake_user())
+
+for _ in range(25):
+    add_post(create_fake_post())
+
+db.close()
