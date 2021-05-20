@@ -14,6 +14,7 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 
 - User - użytkownik
 - Post - wpis
+- Tag - hasztag
 
 ### Relacje
 
@@ -22,6 +23,7 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 - LIKES - użytkownik lubi wpis
 - DISLIKES - użytkownik nie lubi wpisu
 - REFERS_TO - wpis odnosi się do innego wpisu
+- TAGGED_AS - wpis został oznaczony tagiem
 
 ### Atrybuty węzłów
 
@@ -40,7 +42,6 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 - update_date
 - content
 - photo_adress
-- tag
 
 ### Zapytania do bazy (realizowane przez backend; wstępny plan)
 

@@ -2,7 +2,7 @@
 
 ## Przed uruchomieniem
 
-Upewnij się, że twoim katalogiem roboczym jest api
+Upewnij się, że twoim katalogiem roboczym jest generator
 
 Stwórz i uruchom wirtualne środowisko dla interpretera Pythona
 
@@ -17,7 +17,7 @@ Zainstaluj wymagane biblioteki
 pip install -r requirements
 ```
 
-W katalogu api stwórz plik o nazwie .env z definicjami zmiennych PORT, NEO4J_URL, NEO4J_USER, NEO4J_PASSWORD, NEO4J_DATABASE. Przykładowo:
+W katalogu generator na tym samym poziomie, co generator.py stwórz plik o nazwie .env z definicjami zmiennych PORT, NEO4J_URL, NEO4J_USER, NEO4J_PASSWORD, NEO4J_DATABASE. Przykładowo:
 
 ```dotenv
 PORT = '8080'
