@@ -7,13 +7,8 @@ Upewnij się, że twoim katalogiem roboczym jest api
 Stwórz i uruchom wirtualne środowisko dla interpretera Pythona
 
 ```bash
-<<<<<<< HEAD
 virtualenv venv
 source venv/bin/activate
-=======
-virtualenv minisocialnetwork
-source minisocialnetwork/bin/activate
->>>>>>> 42efbcf6dea977c9c8604ea5b8cbaef5d8654725
 ```
 
 Zainstaluj wymagane biblioteki
