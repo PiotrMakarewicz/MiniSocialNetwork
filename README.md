@@ -60,6 +60,10 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 9. zwrócenie wszystkich wpisów użytkownika
 10. zwrócenie wpisów obserwowanych danego użytkownika
 11. zwrócenie wpisów z określonego tagu
+12. zwrócenie wpisów polubionych przez obserwowanych
+13. pokazanie polecanych postów
+14. pokazanie polecanych znajomych
+15. zwrócenie rankingu popularności użytkowników (np. przez PageRank)
 
 ### Wprowadzenie przykładowych danych do bazy
 
