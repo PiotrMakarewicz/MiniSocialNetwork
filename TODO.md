@@ -1,17 +1,15 @@
 # TODO
- - znaleźć dane i zapełnić nimi bazę albo przez pliki .csv albo pisząc generator (preferuję to drugie, można użyć Fakera - Piotrek)
- - dodać schema do bazy oraz obrazek schematu do README
+ - dodać schema do bazy oraz obrazek schematu do README (Piotrek)
  - dodać zapytania pozwalające na wykorzystanie potencjału bazy grafowej (nie tylko operacje CRUD)
- - dodać atrybuty do relacji
  - skupić się na zapytaniach i backendzie, frontend jest drugorzędny
- - rozważyć zrobienie tagu jako węzła, a nie atrybutu posta
+ - dodać constrainty (Piotrek)
+ - zaimplementować atrybuty relacji w generatorze (Piotrek)
+ - dodać zapytania (Gabriel)
+ - dodać username dla użytkowników w zapytaniach (Gabriel)
  
  Przykładowe nowe zapytania:
- - pokaż nowe posty, które zostały polubione przez obserwowanych przeze mnie 
+ - pokaż nowe posty (do tygodnia), które zostały polubione przez obserwowanych przeze mnie 
  - pokaż nowe posty w tagu
- - pokaż posty, które mogłą być interesujące dla mnie (na podstawie lubianych przeze mnie postów w tagach, albo postów lubianych przez obserwowanych przeze mnie)
+ - pokaż posty, które mogłyby być interesujące dla mnie (na podstawie lubianych przeze mnie postów w tagach, albo postów lubianych przez obserwowanych przeze mnie)
  - wyznaczanie popularności używając np. algorytmu PageRank
- - pokaż polecane posty (wybrać kryterium, wg którego mają być polecane)
  - polecani znajomi
-
- - określić, które posty mają być uznawane za nowe
