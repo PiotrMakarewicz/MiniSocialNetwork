@@ -27,25 +27,36 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 
 ### Atrybuty węzłów
 
-### User
+#### User
 
 - name
-- creation_date
+- creation_datetime
 - avatar
 - description
 - role
 - password_hash
 
-### Post
+#### Post
 
-- creation_date
-- update_date
+- creation_datetime
+- update_datetime
 - content
 - photo_adress
 
-### Tag
+#### Tag
 
 - name
+
+### Atrybuty relacji
+
+#### OBSERVES
+ - since_datetime
+
+#### LIKES
+ - datetime
+
+#### DISLIKES
+ - datetime
 
 ### Zapytania do bazy (realizowane przez backend; wstępny plan)
 
