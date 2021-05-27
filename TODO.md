@@ -6,6 +6,8 @@
  - zaimplementować atrybuty relacji w generatorze (Piotrek)
  - dodać zapytania (Gabriel)
  - dodać username dla użytkowników w zapytaniach (Gabriel)
+ - dodać przewodnik po kodzie
+ - dodać dokumentację endpointów (może w Swaggerze)
  
  Przykładowe nowe zapytania:
  - pokaż nowe posty (do tygodnia), które zostały polubione przez obserwowanych przeze mnie 
