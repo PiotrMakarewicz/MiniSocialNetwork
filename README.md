@@ -8,6 +8,20 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 - Gabriel Kępka
 - Piotr Makarewicz
 
+## Przewodnik po kodzie
+
+Kod źródłowy składa się z trzech folderów. Każdy z nich jest niezależnym programem.
+
+- backend
+- frontend
+- generator
+
+Poszczególne programy mają swoje instrukcje uruchomienia we własnych folderach, w plikach README.md.
+
+## Uruchomienie i testowanie projektu
+
+Aby uruchomić i przetestować projekt, należy najpierw wypełnić bazę Neo4j za pomocą generatora. Następnie należy uruchomić backend i na końcu frontend. We frontendzie należy się zalogować z nazwą użytkownika "Userof Minisocialnetwork" i hasłem "password".
+
 ## Model bazy danych
 
 ![schema](schema.png)
@@ -51,14 +65,17 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 
 ### Atrybuty relacji
 
-#### (User) - OBSERVES -> (User) 
- - since
+#### (User) - OBSERVES -> (User)
 
-#### (User) - LIKES -> (Post) 
- - datetime
+- since
+
+#### (User) - LIKES -> (Post)
+
+- datetime
 
 #### (User) - DISLIKES -> (Post)
- - datetime
+
+- datetime
 
 ### Zapytania do bazy (realizowane przez backend; wstępny plan)
 
