@@ -340,5 +340,32 @@ def get_posts_from_tag(tagName):
         })
     return json.dumps({"posts": posts})
 
+@app.route("/<userID>/recommended-users")
+def recommended_users(userID):
+    db = get_db()
+    results = db.read_transaction(lambda tx: list(tx.run(
+        "Match (u:User)-[o:OBSERVES]->(c:User) "
+        "WHERE id(u) = $userID "
+        "MATCH (c)-[r:OBSERVES]->(b:User) "
+        "WHERE NOT EXISTS { MATCH (u)-[:OBSERVES]->(b)} "
+        "RETURN DISTINCT b.name as name, "
+        "b.creation_datetime as creation_datetime, "
+        "b.avatar as avatar, "
+        "b.description as description, "
+        "b.role as role, "
+        "id(b) as id"
+        "", {'userID': int(userID)})))
+    observed = []
+    for user in results:
+        observed.append({
+        'name': user['name'],
+        'creation_datetime': user['creation_datetime'],
+        'avatar': user['avatar'],
+        'description': user['description'],
+        'role': user['role'],
+        'id': user['id'],
+    })
+    return json.dumps({"observed": observed})
+
 if __name__ == '__main__':
     app.run(debug=True)
