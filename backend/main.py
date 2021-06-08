@@ -95,13 +95,17 @@ def get_post(postID):
     db = get_db()
     results  = db.read_transaction(lambda tx: list(tx.run(
         "Match (c:User)-[a:AUTHOR_OF]->(p:Post) "
-        "where id(p) = {} "
+        "where id(p) = $postID "
+        "optional match (:User)-[l:LIKES]->(p) "
+        "optional match (:User)-[d:DISLIKES]->(p) "
         "RETURN p.creation_datetime as creation_datetime, "
         "p.photo_address as photo_address, "
         "p.content as content, "
         "p.update_datetime as update_datetime, "
         "id(c) as authorID, "
-        "id(p) as id".format(postID))))
+        "id(p) as id, "
+        "count(l) - count(d) as rating"
+        "", {'postID': int(postID)})))
     posts = []
     for post in results:
         posts.append({
@@ -110,6 +114,7 @@ def get_post(postID):
             'photo_address': post['photo_address'],
             'content': post['content'],
             'update_datetime': post['update_datetime'],
+            'rating': post['rating'],
             'id': post['id'],
             })
     return json.dumps({"posts": posts})
@@ -435,8 +440,8 @@ def get_recommended_posts(userID):
         "Match (b)-[a:LIKES]->(p:Post) "
         "Match (c:User)-[d:AUTHOR_OF]->(p) "
         "where id(u) = $userID "
-        "RETURN DISTINCT p.creation_datetime as creation_datetime, "
         "AND duration.inDays(datetime(p.creation_datetime), datetime()).days < 8 "
+        "RETURN DISTINCT p.creation_datetime as creation_datetime, "
         "p.photo_address as photo_address, "
         "p.content as content, "
         "p.update_datetime as update_datetime, "
