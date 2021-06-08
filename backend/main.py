@@ -251,5 +251,23 @@ def like_post(userID, postID):
         })
     return json.dumps({"likes": likes})
 
+@app.route("/<userID>/dislike/<postID>")
+def dislike_post(userID, postID):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "Match (p:Post) "
+        "where id(u) = $userID AND id(p) = $postID "
+        "CREATE (u)-[l:DISLIKES {datetime: datetime()}]->(p) "
+        "RETURN id(l) as id"
+        "", {'userID': int(userID), 'postID': int(postID)})))
+    dislikes = []
+    for dislike in results:
+        dislikes.append({
+            'id': dislike['id'],
+        })
+    return json.dumps({"dislikes": dislikes})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
