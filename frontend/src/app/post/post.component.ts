@@ -17,14 +17,19 @@ export class PostComponent implements OnInit {
   @Output() content: any = ""
   @Output() rating: any = 0;
   @Output() photoUrl: any = "";
+  @Output() tags: any = [];
 
   constructor(private userService: UserService, private loginService: LoginService) { }
 
   async getPost() {
     if (this.id) {
-      const result = await fetch(backendAddress + 'post/' + this.id);
-      const json = await result.json();
-      return json['posts'][0]
+      let result = await fetch(backendAddress + 'post/' + this.id);
+      let json = await result.json();
+      const post = json['posts'][0];
+      result = await fetch(backendAddress + 'post/' + this.id + '/tags')
+      json = await result.json();
+      const tags = json['tags'];
+      return {...post, tags: tags};
     }
   }
 
@@ -35,10 +40,12 @@ export class PostComponent implements OnInit {
 
   async update() {
     let post = await this.getPost();
+    console.log(post);
     console.log("postId: ", this.id);
     this.authorID = post['author']
     this.content = post['content']
     this.rating = post['rating']
+    this.tags = post['tags']
     let user = await this.userService.getUser(post['author']) 
     
     this.authorName = user['name'];
