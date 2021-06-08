@@ -46,6 +46,7 @@ export class PostComponent implements OnInit {
     this.content = post['content']
     this.rating = post['rating']
     this.tags = post['tags']
+    this.photoUrl = post['photo_address']
     let user = await this.userService.getUser(post['author']) 
     
     this.authorName = user['name'];
