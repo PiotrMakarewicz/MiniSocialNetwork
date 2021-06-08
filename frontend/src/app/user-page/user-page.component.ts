@@ -5,10 +5,9 @@ import { UserService } from '../user.service';
 @Component({
   selector: 'app-user-page',
   templateUrl: './user-page.component.html',
-  styleUrls: ['./user-page.component.css'],
-  providers: [ UserService]
+  styleUrls: ['./user-page.component.css']
 })
-export class UserPageComponent implements OnInit, OnDestroy {
+export class UserPageComponent implements OnInit {
   @Output() id: any;
   private sub: any;
   @Output() imageUrl: any;
@@ -30,7 +29,8 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    if (this.sub)
+      this.sub.unsubscribe();
   }
 
 }

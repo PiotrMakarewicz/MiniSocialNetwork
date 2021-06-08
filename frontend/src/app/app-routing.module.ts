@@ -5,13 +5,12 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { LoginService } from './login.service'
 
 const routes: Routes = [
-  // { path: 'user/:id', component: UserPageComponent, canActivate: [LoginService]},
-  // { path: '', component: MainPageComponent, canActivate: [LoginService]},
-  // { path: 'login', component: LoginPageComponent},
-  // { path: '**', redirectTo: ''}
-    { path: 'user/:id', component: UserPageComponent},
+  { path: 'user/:id', component: UserPageComponent, canActivate: [LoginService]},
   { path: 'login', component: LoginPageComponent},
   { path: '**', redirectTo: 'login'}
+  //   { path: 'user/:id', component: UserPageComponent},
+  // { path: 'login', component: LoginPageComponent},
+  // { path: '**', redirectTo: 'login'}
 ];
 
 @NgModule({

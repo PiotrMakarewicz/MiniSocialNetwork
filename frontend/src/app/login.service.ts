@@ -26,7 +26,7 @@ export class LoginService implements CanActivate {
       this.userId = json['id'];
       this.passwordHash = MD5(password);
       alert("Logged in as " + this.userName + ".");
-      this.router.navigate(['/user/', this.userId])
+      this.router.navigate(['/user/'+ this.userId])
       return true;
     }
     else{
