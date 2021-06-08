@@ -276,6 +276,43 @@ def dislike_post(userID, postID):
         })
     return json.dumps({"dislikes": dislikes})
 
+@app.route("/<userID>/observe/<observedID>")
+def observe_user(userID, observedID):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "Match (o:User) "
+        "where id(u) = $userID AND id(o) = $observedID "
+        "AND NOT id(u) = $observedID "
+        "MERGE (u)-[b:OBSERVES]->(o) "
+        "ON CREATE SET b.since = datetime() "
+        "RETURN id(b) as id"
+        "", {'userID': int(userID), 'observedID': int(observedID)})))
+    observations = []
+    for obs in results:
+        observations.append({
+            'id': obs['id']
+        })
+    return json.dumps({"observations": observations})
+
+@app.route("/<userID>/unobserve/<observedID>")
+def unobserve_user(userID, observedID):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "Match (o:User) "
+        "where id(u) = $userID AND id(o) = $observedID "
+        "MATCH (u)-[b:OBSERVES]->(o) "
+        "WITH b, id(b) as identity "
+        "DELETE b "
+        "RETURN identity as id"
+        "", {'userID': int(userID), 'observedID': int(observedID)})))
+    observations = []
+    for obs in results:
+        observations.append({
+            'id': obs['id']
+        })
+    return json.dumps({"observations": observations})
 
 if __name__ == '__main__':
     app.run(debug=True)
