@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase, basic_auth, Result
 from dotenv import load_dotenv
 from faker import Faker
-from datetime import datetime
+from datetime import date, datetime
 
 import os
 import random
@@ -16,7 +16,6 @@ port = os.getenv("PORT", 8080)
 
 driver = GraphDatabase.driver(url, auth=basic_auth(username, password))
 db = driver.session(database=database)
-
 fake = Faker()
 
 
@@ -103,34 +102,34 @@ def add_tag(tag: dict) -> int:
     return result.data()[0]['id(t)']
 
 
-def add_observes_between(observer_id: int, observed_id: int) -> None:
+def add_observes_between(observer_id: int, observed_id: int, since: datetime) -> None:
     """
     Creates the OBSERVES relationship between User nodes represented by observer_id and observed_id
     @param observer_id: ID of an observer User node already existing in the database
     @param observed_id: ID of an observed User node already existing in the database
     """
-    db.run("MATCH (u:User), (v:User) WHERE id(u) = {} AND id(v) = {} CREATE (u)-[r:OBSERVES]->(v)"
-        .format(observer_id, observed_id))
+    db.run("MATCH (u:User), (v:User) WHERE id(u) = {} AND id(v) = {} CREATE (u)-[r:OBSERVES {{since: '{}'}}]->(v)"
+        .format(observer_id, observed_id, since))
 
 
-def add_likes_between(user_id: int, post_id: int) -> None:
+def add_likes_between(user_id: int, post_id: int, datetime: datetime) -> None:
     """
     Creates the LIKES relationship between the User node represented by user_id and the Post node represented by post_id
     @param user_id: ID of a User node already existing in the database
     @param post_id: ID of a Post node already exisiting in the database
     """
-    db.run("MATCH (u:User), (p:Post) WHERE id(u) = {} AND id(p) = {} CREATE (u)-[r:LIKES]->(p)"
-        .format(user_id, post_id))
+    db.run("MATCH (u:User), (p:Post) WHERE id(u) = {} AND id(p) = {} CREATE (u)-[r:LIKES {{datetime: '{}'}}]->(p)"
+        .format(user_id, post_id, datetime))
 
 
-def add_dislikes_between(user_id: int, post_id: int) -> None:
+def add_dislikes_between(user_id: int, post_id: int, datetime: datetime) -> None:
     """
     Creates the DISLIKES relationship between the User node represented by user_id and the Post node represented by post_id
     @param user_id: ID of a User node already existing in the database
     @param post_id: ID of a Post node already existing in the database
     """
-    db.run("MATCH (u:User), (p:Post) WHERE id(u) = {} AND id(p) = {} CREATE (u)-[r:DISLIKES]->(p)"
-        .format(user_id, post_id))
+    db.run("MATCH (u:User), (p:Post) WHERE id(u) = {} AND id(p) = {} CREATE (u)-[r:DISLIKES {{datetime: '{}'}}]->(p)"
+        .format(user_id, post_id, datetime))
 
 
 def add_refers_to_between(referring_id: int, referred_id: int) -> None:
@@ -153,16 +152,16 @@ def add_tagged_as_between(post_id: int, tag_id: int) -> None:
 
 
 db_params = {
-    "users": 50,
+    "users": 200,
     "min user posts": 2,
-    "max user posts": 4,
+    "max user posts": 10,
     "min observed by user": 0,
     "max observed by user": 10,
     "min liked posts per user": 0,
     "max liked posts per user": 10,
     "min disliked posts per user": 0,
     "max disliked posts per user": 5,
-    "tags": 10,
+    "tags": 30,
     "posts with photos freq": 0.3,
     "min tags per post": 0,
     "max tags per post": 5,
@@ -191,7 +190,10 @@ def generate_database():
         num_observed = random.randint(db_params['min observed by user'], db_params['max observed by user'])
         observed_ids = random.sample(other_user_ids, k=num_observed)
         for observed_id in observed_ids:
-            add_observes_between(user_id, observed_id)
+            observed = users[observed_id]
+            datetime_begin = user['creation_datetime'] if user['creation_datetime'] > observed['creation_datetime'] else observed['creation_datetime']
+            since = fake.date_time_between(datetime_begin)
+            add_observes_between(user_id, observed_id, since)
 
     ### Add Post nodes and AUTHOR_OF relationships
     
@@ -210,9 +212,16 @@ def generate_database():
         liked_posts_ids = random.sample(posts.keys(), k=num_liked_posts)
         disliked_posts_ids = random.sample(set(posts.keys()).difference(set(liked_posts_ids)), k=num_disliked_posts)
         for post_id in liked_posts_ids:
-            add_likes_between(user_id, post_id)
+            post = posts[post_id]
+            datetime_begin = post['creation_datetime'] if post['creation_datetime'] > user['creation_datetime'] else user['creation_datetime']
+            datetime = fake.date_time_between(datetime_begin)
+            add_likes_between(user_id, post_id, datetime)
         for post_id in disliked_posts_ids:
-            add_dislikes_between(user_id, post_id)
+            post = posts[post_id]
+            datetime_begin = post['creation_datetime'] if post['creation_datetime'] > user['creation_datetime'] else user['creation_datetime']
+            datetime = fake.date_time_between(datetime_begin)
+            post = posts[post_id]
+            add_dislikes_between(user_id, post_id, datetime)
 
     ### Add REFERS_TO relationships
 
