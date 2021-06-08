@@ -19,6 +19,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   @Output() user: any;
   observeLink: any;
   unobserveLink: any;
+  @Output() posts: any;
 
   constructor(private route: ActivatedRoute, private userService: UserService, private loginService: LoginService) { }
 
@@ -32,6 +33,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
        this.name = this.user['name'];
        this.observeLink = backendAddress + this.loginService.getUserId() + "/observe/" + this.id;
        this.unobserveLink = backendAddress + this.loginService.getUserId() + "/observe/" + this.id;
+       this.posts = (await (await fetch(backendAddress+this.id+'/posts')).json())['posts']
     });
   }
 

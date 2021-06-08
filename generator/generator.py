@@ -187,7 +187,7 @@ db_params = {
     "min disliked posts per user": 0,
     "max disliked posts per user": 5,
     "tags": 30,
-    "posts with photos freq": 0.3,
+    "posts with photos freq": 0.1,
     "min tags per post": 0,
     "max tags per post": 5,
     "referring post chance": 0.2
@@ -225,7 +225,7 @@ def generate_database():
     for user_id, user in users.items():
         num_posts = random.randint(db_params['min user posts'], db_params['max user posts'])
         for _ in range(num_posts):
-            post = create_fake_post(user['creation_datetime'], with_photo=(random.uniform(0, 1) > db_params['posts with photos freq']))
+            post = create_fake_post(user['creation_datetime'], with_photo=(random.uniform(0, 1) < db_params['posts with photos freq']))
             post_id = add_post(user_id, post)
             posts[post_id] = post
     
