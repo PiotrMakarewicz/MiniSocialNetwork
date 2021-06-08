@@ -18,6 +18,7 @@ export class PostComponent implements OnInit {
   @Output() rating: any = 0;
   @Output() photoUrl: any = "";
   @Output() tags: any = [];
+  @Output() responses: any = [];
 
   constructor(private userService: UserService, private loginService: LoginService) { }
 
@@ -33,9 +34,21 @@ export class PostComponent implements OnInit {
     }
   }
 
+  async getResponses() {
+    if (this.id) {
+      let result = await fetch(backendAddress + 'post/' + this.id + '/responses');
+      let json = await result.json();
+      let posts = json['posts'];
+      this.responses = [];
+      for (let post of posts){
+        this.responses.push(Number(post['id']));
+      }
+    }
+  }
+
   async ngOnInit() {
     await this.update();
-    
+    await this.getResponses();
   }
 
   async update() {
@@ -47,8 +60,8 @@ export class PostComponent implements OnInit {
     this.rating = post['rating']
     this.tags = post['tags']
     this.photoUrl = post['photo_address']
-    let user = await this.userService.getUser(post['author']) 
-    
+    let user = await this.userService.getUser(post['author'])
+
     this.authorName = user['name'];
   }
 
