@@ -22,7 +22,7 @@ export class PostComponent implements OnInit {
 
   async getPost() {
     if (this.id) {
-      const result = await fetch(backendAddress + 'post/409');
+      const result = await fetch(backendAddress + 'post/' + this.id);
       const json = await result.json();
       return json['posts'][0]
     }
@@ -35,6 +35,7 @@ export class PostComponent implements OnInit {
 
   async update() {
     let post = await this.getPost();
+    console.log("postId: ", this.id);
     this.authorID = post['author']
     this.content = post['content']
     this.rating = post['rating']
@@ -45,13 +46,16 @@ export class PostComponent implements OnInit {
 
   async like() {
     let user = await this.loginService.getUserId();
-    await fetch(backendAddress + ''+user+'/like/'+this.id);
+    let result = await fetch(backendAddress + ''+user+'/like/'+this.id);
+
     console.log('like')
     await this.update();
   }
   async dislike() {
     let user = await this.loginService.getUserId();
-    await fetch(backendAddress + ''+user+'/dislike/'+this.id);
+    let result = await fetch(backendAddress + ''+user+'/dislike/'+this.id);
+    let json = await result.json();
+    console.log(json);
     console.log('dislike')
     await this.update();
   }
