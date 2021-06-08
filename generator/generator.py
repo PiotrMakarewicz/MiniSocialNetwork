@@ -151,6 +151,28 @@ def add_tagged_as_between(post_id: int, tag_id: int) -> None:
         .format(post_id, tag_id))
 
 
+def add_user_for_testing():
+    """
+    Adds a user that can be later used to test the program
+    # username: Userof Minisocialnetwork
+    # password: password
+    # password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
+    """
+    global fake
+
+    user = dict()
+
+    user['name'] = "Userof Minisocialnetwork"
+    user['creation_datetime'] = fake.date_time_between('-1y')
+    user['description'] = "A user that can be later used to test the program"
+    user['role'] = random.choices(['admin', 'none'], [1, 100])[0]
+    user['password_hash'] = "5f4dcc3b5aa765d61d8327deb882cf99"
+    user['avatar'] = 'https://via.placeholder.com/300/09f/fff.png'
+
+    add_user(user)
+
+
+
 db_params = {
     "users": 200,
     "min user posts": 2,
@@ -259,6 +281,8 @@ def generate_database():
         tag_ids = random.sample(tags.keys(), k=num_tags)
         for tag_id in tag_ids:
             add_tagged_as_between(post_id, tag_id)
+    
+    add_user_for_testing()
 
 
 try:

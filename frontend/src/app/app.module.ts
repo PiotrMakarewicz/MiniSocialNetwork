@@ -11,6 +11,8 @@ import { UserSmallComponent } from './user-small/user-small.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { MainPageComponent } from './main-page/main-page.component';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule
   ],
   providers: [],

@@ -24,7 +24,21 @@ def get_db():
     if not hasattr(g, 'neo4j_db'):
         g.neo4j_db = driver.session(database=database)
     return g.neo4j_db
-    
+
+
+@app.route("/password_check/<username>/<password_hash>")
+def get_user_id_if_password_hash_is_correct(username, password_hash):
+    db = get_db()
+    results = db.read_transaction(lambda tx: list(tx.run(
+        "MATCH (u:User) "
+        "WHERE u.name = \"{}\" "
+        "and u.password_hash = \"{}\" "
+        "RETURN id(u)"
+        .format(username, password_hash)
+    )))
+    return json.dumps({'id': results[0][0] if len(results) > 0 else None})
+
+
 
 @app.route("/")
 def get_all_users():
