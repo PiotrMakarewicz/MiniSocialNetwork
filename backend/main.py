@@ -130,7 +130,7 @@ def get_observed_by_user(userID):
         "b.avatar as avatar, "
         "b.description as description, "
         "b.role as role, "
-        "id(b) as id"
+        "id(b) as id "
         "", {'userID': int(userID)})))
     observed = []
     for user in results:
@@ -156,7 +156,7 @@ def get_observing_user(userID):
         "b.avatar as avatar, "
         "b.description as description, "
         "b.role as role, "
-        "id(b) as id"
+        "id(b) as id "
         "", {'userID': int(userID)})))
     observing = []
     for user in results:
@@ -181,7 +181,8 @@ def get_posts_by_user(userID):
         "p.photo_address as photo_address, "
         "p.content as content, "
         "p.update_datetime as update_datetime, "
-        "id(p) as id"
+        "id(p) as id "
+        "ORDER BY creation_datetime DESC"
         "", {'userID': int(userID)})))
     posts = []
     for post in results:
@@ -208,7 +209,8 @@ def get_liked_by_user(userID):
         "p.content as content, "
         "p.update_datetime as update_datetime, "
         "c.name as author, "
-        "id(p) as id"
+        "id(p) as id "
+        "ORDER BY creation_datetime DESC"
         "", {'userID': int(userID)})))
     posts = []
     for post in results:
@@ -235,7 +237,8 @@ def get_disliked_by_user(userID):
         "p.content as content, "
         "p.update_datetime as update_datetime, "
         "c.name as author, "
-        "id(p) as id"
+        "id(p) as id "
+        "ORDER BY creation_datetime DESC"
         "", {'userID': int(userID)})))
     posts = []
     for post in results:
@@ -262,7 +265,8 @@ def get_posts_by_observed(userID):
         "p.content as content, "
         "p.update_datetime as update_datetime, "
         "b.name as author"
-        "id(p) as id"
+        "id(p) as id "
+        "ORDER BY creation_datetime DESC"
         "", {'userID': int(userID)})))
     posts = []
     for post in results:
@@ -368,7 +372,8 @@ def get_posts_from_tag(tagName):
         "p.photo_address as photo_address, "
         "p.content as content, "
         "p.update_datetime as update_datetime, "
-        "id(p) as id"
+        "id(p) as id "
+        "ORDER BY creation_datetime DESC"
         "", {'tagName': tagName})))
     posts = []
     for post in results:
