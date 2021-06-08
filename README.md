@@ -75,11 +75,3 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 13. pokazanie polecanych postów
 14. pokazanie polecanych znajomych
 15. zwrócenie rankingu popularności użytkowników (np. przez PageRank)
-
-### Wprowadzenie przykładowych danych do bazy
-
-```cypher
-CREATE (n:User {name: 'Andy', creation_date: '2021-01-10', avatar: 'https://via.placeholder.com/300/09f/fff.png', description: 'the first user!',role: 'none', password_hash: 'none'})
-CREATE (n:User {name: 'Johnny', creation_date: '2021-03-12', avatar: 'https://via.placeholder.com/300/09f/fff.png', description: 'the first user!',role: 'none', password_hash: 'none'})
-CREATE (n:User {name: 'Robert', creation_date: '2020-12-12', avatar: 'https://via.placeholder.com/300/09f/fff.png', description: 'the first user!',role: 'none', password_hash: 'none'})
-```
