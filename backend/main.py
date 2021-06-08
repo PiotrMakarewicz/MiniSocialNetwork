@@ -402,6 +402,20 @@ def get_posts_from_tag(tagName):
         })
     return json.dumps({"posts": posts})
 
+@app.route("/post/<postID>/tags")
+def get_post_tags(postID):
+    db = get_db()
+    results = db.read_transaction(lambda tx: list(tx.run(
+        "Match (p:Post)-[t:TAGGED_AS]->(z:Tag) "
+        "WHERE id(p) = $postID "
+        "MATCH (u:User)-[a:AUTHOR_OF]->(p) "
+        "RETURN z.name as name"
+        "", {'postID': int(postID)})))
+    tags = []
+    for tag in results:
+        tags.append(tag['name'])
+    return json.dumps({"tags": tags})
+
 @app.route("/<userID>/recommended-users")
 def recommended_users(userID):
     db = get_db()
