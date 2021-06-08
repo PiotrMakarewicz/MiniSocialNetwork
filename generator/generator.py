@@ -29,7 +29,7 @@ def create_fake_user() -> dict:
     user = dict()
 
     user['name'] = fake.name()
-    user['creation_datetime'] = fake.date_time_between('-1y')
+    user['creation_datetime'] = fake.date_time_between('-1y').strftime("%Y-%m-%dT%H-%M-%S")
     user['description'] = fake.paragraph()
     user['role'] = random.choices(['admin', 'none'], [1, 100])[0]
     user['password_hash'] = uuid.uuid4().hex
@@ -49,8 +49,8 @@ def create_fake_post(first_possible_creation_datetime: datetime, with_photo: boo
 
     post = dict()
 
-    post['creation_datetime'] = fake.date_time_between(first_possible_creation_datetime)
-    post['update_datetime'] = random.choice([None, fake.date_time_between_dates(post['creation_datetime'], None)])
+    post['creation_datetime'] = fake.date_time_between(first_possible_creation_datetime).strftime("%Y-%m-%dT%H-%M-%S").strftime("%Y-%m-%dT%H-%M-%S")
+    post['update_datetime'] = random.choice([None, fake.date_time_between_dates(post['creation_datetime'], None)]).strftime("%Y-%m-%dT%H-%M-%S")
     post['content'] = fake.paragraph() 
     post['photo_address'] = 'https://via.placeholder.com/500/02f/a0f.png' if with_photo else ''
 
@@ -163,7 +163,7 @@ def add_user_for_testing():
     user = dict()
 
     user['name'] = "Userof Minisocialnetwork"
-    user['creation_datetime'] = fake.date_time_between('-1y')
+    user['creation_datetime'] = fake.date_time_between('-1y').strftime("%Y-%m-%dT%H-%M-%S")
     user['description'] = "A user that can be later used to test the program"
     user['role'] = random.choices(['admin', 'none'], [1, 100])[0]
     user['password_hash'] = "5f4dcc3b5aa765d61d8327deb882cf99"
@@ -214,7 +214,7 @@ def generate_database():
         for observed_id in observed_ids:
             observed = users[observed_id]
             datetime_begin = user['creation_datetime'] if user['creation_datetime'] > observed['creation_datetime'] else observed['creation_datetime']
-            since = fake.date_time_between(datetime_begin)
+            since = fake.date_time_between(datetime_begin).strftime("%Y-%m-%dT%H-%M-%S")
             add_observes_between(user_id, observed_id, since)
 
     ### Add Post nodes and AUTHOR_OF relationships
@@ -236,12 +236,12 @@ def generate_database():
         for post_id in liked_posts_ids:
             post = posts[post_id]
             datetime_begin = post['creation_datetime'] if post['creation_datetime'] > user['creation_datetime'] else user['creation_datetime']
-            datetime = fake.date_time_between(datetime_begin)
+            datetime = fake.date_time_between(datetime_begin).strftime("%Y-%m-%dT%H-%M-%S")
             add_likes_between(user_id, post_id, datetime)
         for post_id in disliked_posts_ids:
             post = posts[post_id]
             datetime_begin = post['creation_datetime'] if post['creation_datetime'] > user['creation_datetime'] else user['creation_datetime']
-            datetime = fake.date_time_between(datetime_begin)
+            datetime = fake.date_time_between(datetime_begin).strftime("%Y-%m-%dT%H-%M-%S")
             post = posts[post_id]
             add_dislikes_between(user_id, post_id, datetime)
 
