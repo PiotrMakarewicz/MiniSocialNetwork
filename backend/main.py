@@ -55,11 +55,11 @@ def get_all_users():
     users = []
     for user in results:
         users.append({
-        'name': user['name'],
-        'creation_datetime': user['creation_datetime'],
-        'avatar': user['avatar'],
-        'description': user['description'],
-        'role': user['role'],
+        #'name': user['name'],
+        #'creation_datetime': user['creation_datetime'],
+        #'avatar': user['avatar'],
+        #'description': user['description'],
+        #'role': user['role'],
         'id': user['id'],
     })
     return json.dumps({"users": users})
@@ -130,11 +130,11 @@ def get_observed_by_user(userID):
     observed = []
     for user in results:
         observed.append({
-        'name': user['name'],
-        'creation_datetime': user['creation_datetime'],
-        'avatar': user['avatar'],
-        'description': user['description'],
-        'role': user['role'],
+        #'name': user['name'],
+        #'creation_datetime': user['creation_datetime'],
+        #'avatar': user['avatar'],
+        #'description': user['description'],
+        #'role': user['role'],
         'id': user['id'],
     })
     return json.dumps({"observed": observed})
@@ -156,11 +156,11 @@ def get_observing_user(userID):
     observing = []
     for user in results:
         observing.append({
-        'name': user['name'],
-        'creation_datetime': user['creation_datetime'],
-        'avatar': user['avatar'],
-        'description': user['description'],
-        'role': user['role'],
+        #'name': user['name'],
+        #'creation_datetime': user['creation_datetime'],
+        #'avatar': user['avatar'],
+        #'description': user['description'],
+        #'role': user['role'],
         'id': user['id'],
     })
     return json.dumps({"observing": observing})
@@ -181,11 +181,11 @@ def get_posts_by_user(userID):
     posts = []
     for post in results:
         posts.append({
-        'author': userID,
-        'creation_datetime': post['creation_datetime'],
-        'photo_address': post['photo_address'],
-        'content': post['content'],
-        'update_datetime': post['update_datetime'],
+        #'author': userID,
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
         'id': post['id'],
         })
     return json.dumps({"posts": posts})
@@ -208,11 +208,11 @@ def get_liked_by_user(userID):
     posts = []
     for post in results:
         posts.append({
-        'author': post['author'],
-        'creation_datetime': post['creation_datetime'],
-        'photo_address': post['photo_address'],
-        'content': post['content'],
-        'update_datetime': post['update_datetime'],
+        #'author': post['author'],
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
         'id': post['id'],
         })
     return json.dumps({"posts": posts})
@@ -235,11 +235,11 @@ def get_disliked_by_user(userID):
     posts = []
     for post in results:
         posts.append({
-        'author': post['author'],
-        'creation_datetime': post['creation_datetime'],
-        'photo_address': post['photo_address'],
-        'content': post['content'],
-        'update_datetime': post['update_datetime'],
+        #'author': post['author'],
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
         'id': post['id'],
         })
     return json.dumps({"posts": posts})
@@ -262,11 +262,11 @@ def get_posts_by_observed(userID):
     posts = []
     for post in results:
         posts.append({
-        'author': post['author'],
-        'creation_datetime': post['creation_datetime'],
-        'photo_address': post['photo_address'],
-        'content': post['content'],
-        'update_datetime': post['update_datetime'],
+        #'author': post['author'],
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
         'id': post['id'],
         })
     return json.dumps({"posts": posts})
@@ -368,11 +368,11 @@ def get_posts_from_tag(tagName):
     posts = []
     for post in results:
         posts.append({
-        'author': post['author'],
-        'creation_datetime': post['creation_datetime'],
-        'photo_address': post['photo_address'],
-        'content': post['content'],
-        'update_datetime': post['update_datetime'],
+        #'author': post['author'],
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
         'id': post['id'],
         })
     return json.dumps({"posts": posts})
@@ -395,11 +395,11 @@ def recommended_users(userID):
     observed = []
     for user in results:
         observed.append({
-        'name': user['name'],
-        'creation_datetime': user['creation_datetime'],
-        'avatar': user['avatar'],
-        'description': user['description'],
-        'role': user['role'],
+        #'name': user['name'],
+        #'creation_datetime': user['creation_datetime'],
+        #'avatar': user['avatar'],
+        #'description': user['description'],
+        #'role': user['role'],
         'id': user['id'],
     })
     return json.dumps({"observed": observed})
@@ -421,7 +421,7 @@ def get_user_ranking():
     ranking = []
     for user in results:
         ranking.append({
-        'name': user['name'],
+        #'name': user['name'],
         'id': user['id'],
         'score': user['score']
     })
@@ -436,6 +436,7 @@ def get_recommended_posts(userID):
         "Match (c:User)-[d:AUTHOR_OF]->(p) "
         "where id(u) = $userID "
         "RETURN DISTINCT p.creation_datetime as creation_datetime, "
+        "AND duration.inDays(datetime(p.creation_datetime), datetime()).days < 8 "
         "p.photo_address as photo_address, "
         "p.content as content, "
         "p.update_datetime as update_datetime, "
@@ -446,11 +447,11 @@ def get_recommended_posts(userID):
     posts = []
     for post in results:
         posts.append({
-        'author': post['author'],
-        'creation_datetime': post['creation_datetime'],
-        'photo_address': post['photo_address'],
-        'content': post['content'],
-        'update_datetime': post['update_datetime'],
+        #'author': post['author'],
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
         'id': post['id'],
         })
     return json.dumps({"posts": posts})
