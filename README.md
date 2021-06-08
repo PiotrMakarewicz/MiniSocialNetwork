@@ -18,12 +18,12 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 
 ### Relacje
 
-- AUTHOR_OF - określa autorstwo wpisu
-- OBSERVES - użytkownik obserwuje innego użytkownika
-- LIKES - użytkownik lubi wpis
-- DISLIKES - użytkownik nie lubi wpisu
-- REFERS_TO - wpis odnosi się do innego wpisu
-- TAGGED_AS - wpis został oznaczony tagiem
+- (User) - AUTHOR_OF -> (Post) - określa autorstwo wpisu
+- (User) - OBSERVES -> (User) - użytkownik obserwuje innego użytkownika
+- (User) - LIKES -> (Post) - użytkownik lubi wpis
+- (User) - DISLIKES -> (Post) - użytkownik nie lubi wpisu
+- (Post) - REFERS_TO -> (Post) - wpis odnosi się do innego wpisu
+- (Post) - TAGGED_AS -> (Tag) - wpis został oznaczony tagiem
 
 ### Atrybuty węzłów
 
@@ -49,13 +49,13 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 
 ### Atrybuty relacji
 
-#### OBSERVES
- - since_datetime
+#### (User) - OBSERVES -> (User) 
+ - since
 
-#### LIKES
+#### (User) - LIKES -> (Post) 
  - datetime
 
-#### DISLIKES
+#### (User) - DISLIKES -> (Post)
  - datetime
 
 ### Zapytania do bazy (realizowane przez backend; wstępny plan)
