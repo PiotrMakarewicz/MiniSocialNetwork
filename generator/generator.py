@@ -1,7 +1,8 @@
 from neo4j import GraphDatabase, basic_auth, Result
 from dotenv import load_dotenv
 from faker import Faker
-from datetime import date, datetime
+from datetime import date
+from datetime import datetime as dt
 
 import os
 import random
@@ -38,7 +39,7 @@ def create_fake_user() -> dict:
     return user
 
 
-def create_fake_post(first_possible_creation_datetime: datetime, with_photo: bool) -> dict:
+def create_fake_post(first_possible_creation_datetime: dt, with_photo: bool) -> dict:
     """
     Returns a dictionary representing a Post node that can be later inserted into the database.
     @param first_possible_creation_datetime: this is the first possible date of this post. It may be used to create a post for a user registered at a certain day
@@ -49,8 +50,10 @@ def create_fake_post(first_possible_creation_datetime: datetime, with_photo: boo
 
     post = dict()
 
-    post['creation_datetime'] = fake.date_time_between(first_possible_creation_datetime).strftime("%Y-%m-%dT%H-%M-%S").strftime("%Y-%m-%dT%H-%M-%S")
-    post['update_datetime'] = random.choice([None, fake.date_time_between_dates(post['creation_datetime'], None)]).strftime("%Y-%m-%dT%H-%M-%S")
+    post['creation_datetime'] = fake.date_time_between(dt.strptime(first_possible_creation_datetime, "%Y-%m-%dT%H-%M-%S")).strftime("%Y-%m-%dT%H-%M-%S")
+    post['update_datetime'] = random.choice([None, fake.date_time_between_dates(dt.strptime(post['creation_datetime'], "%Y-%m-%dT%H-%M-%S"), None)])
+    if post['update_datetime'] is not None:
+        post['update_datetime'] = post['update_datetime'].strftime("%Y-%m-%dT%H-%M-%S")
     post['content'] = fake.paragraph() 
     post['photo_address'] = 'https://via.placeholder.com/500/02f/a0f.png' if with_photo else ''
 
@@ -102,7 +105,7 @@ def add_tag(tag: dict) -> int:
     return result.data()[0]['id(t)']
 
 
-def add_observes_between(observer_id: int, observed_id: int, since: datetime) -> None:
+def add_observes_between(observer_id: int, observed_id: int, since: dt) -> None:
     """
     Creates the OBSERVES relationship between User nodes represented by observer_id and observed_id
     @param observer_id: ID of an observer User node already existing in the database
@@ -112,7 +115,7 @@ def add_observes_between(observer_id: int, observed_id: int, since: datetime) ->
         .format(observer_id, observed_id, since))
 
 
-def add_likes_between(user_id: int, post_id: int, datetime: datetime) -> None:
+def add_likes_between(user_id: int, post_id: int, datetime: dt) -> None:
     """
     Creates the LIKES relationship between the User node represented by user_id and the Post node represented by post_id
     @param user_id: ID of a User node already existing in the database
@@ -122,7 +125,7 @@ def add_likes_between(user_id: int, post_id: int, datetime: datetime) -> None:
         .format(user_id, post_id, datetime))
 
 
-def add_dislikes_between(user_id: int, post_id: int, datetime: datetime) -> None:
+def add_dislikes_between(user_id: int, post_id: int, datetime: dt) -> None:
     """
     Creates the DISLIKES relationship between the User node represented by user_id and the Post node represented by post_id
     @param user_id: ID of a User node already existing in the database
@@ -214,7 +217,7 @@ def generate_database():
         for observed_id in observed_ids:
             observed = users[observed_id]
             datetime_begin = user['creation_datetime'] if user['creation_datetime'] > observed['creation_datetime'] else observed['creation_datetime']
-            since = fake.date_time_between(datetime_begin).strftime("%Y-%m-%dT%H-%M-%S")
+            since = fake.date_time_between(dt.strptime(datetime_begin,"%Y-%m-%dT%H-%M-%S")).strftime("%Y-%m-%dT%H-%M-%S")
             add_observes_between(user_id, observed_id, since)
 
     ### Add Post nodes and AUTHOR_OF relationships
@@ -236,12 +239,12 @@ def generate_database():
         for post_id in liked_posts_ids:
             post = posts[post_id]
             datetime_begin = post['creation_datetime'] if post['creation_datetime'] > user['creation_datetime'] else user['creation_datetime']
-            datetime = fake.date_time_between(datetime_begin).strftime("%Y-%m-%dT%H-%M-%S")
+            datetime = fake.date_time_between(dt.strptime(datetime_begin, "%Y-%m-%dT%H-%M-%S")).strftime("%Y-%m-%dT%H-%M-%S")
             add_likes_between(user_id, post_id, datetime)
         for post_id in disliked_posts_ids:
             post = posts[post_id]
             datetime_begin = post['creation_datetime'] if post['creation_datetime'] > user['creation_datetime'] else user['creation_datetime']
-            datetime = fake.date_time_between(datetime_begin).strftime("%Y-%m-%dT%H-%M-%S")
+            datetime = fake.date_time_between(dt.strptime(datetime_begin, "%Y-%m-%dT%H-%M-%S")).strftime("%Y-%m-%dT%H-%M-%S")
             post = posts[post_id]
             add_dislikes_between(user_id, post_id, datetime)
 
