@@ -10,19 +10,24 @@ import { UserService } from '../user.service';
   providers: [ UserService]
 })
 export class UserPageComponent implements OnInit, OnDestroy {
-  private id: any;
+  @Output() id: any;
   private sub: any;
-  private imageUrl: any;
-  private name: any;
-  private description: any;
-  @Output() private user: any;
+  @Output() imageUrl: any;
+  @Output() name: any;
+  @Output() description: any;
+  @Output() user: any;
 
   constructor(private route: ActivatedRoute, private userService: UserService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(async params => {
-       this.id = +params['id'];
+       this.id = + params['id'];
        this.user = await this.userService.getUser(this.id);
+       console.log(this.user);
+       this.id = this.user['id'];
+       this.imageUrl = this.user['avatar'];
+       this.description = this.user['description'];
+       this.name = this.user['name'];
     });
   }
 

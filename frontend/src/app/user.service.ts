@@ -12,8 +12,8 @@ export class UserService {
   public async getUser(id: number){
     const results = await fetch(backendAddress+String(id));
     const json = await results.json();
-    if (json['user'])
-      return json['user'];
+    if (json['users'].length > 0)
+      return json['users'][0];
     else return null;
   }
 }
