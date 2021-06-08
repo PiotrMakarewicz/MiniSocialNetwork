@@ -56,14 +56,14 @@ def get_user(userID):
     db = get_db()
     results = db.read_transaction(lambda tx: list(tx.run(
         "Match (u:User)"
-        "where id(u) = {}"
+        "WHERE id(u) = $userID "
         "RETURN u.name as name, "
         "u.creation_datetime as creation_datetime, "
         "u.avatar as avatar, "
         "u.description as description, "
         "u.role as role, "
         "id(u) as id"
-        "".format(userID))))
+        "", {'userID': int(userID)})))
     users = []
     for result in results:
         users.append({
@@ -89,7 +89,7 @@ def get_observed_by_user(userID):
         "b.description as description, "
         "b.role as role, "
         "id(b) as id"
-        "", {'userID': userID})))
+        "", {'userID': int(userID)})))
     observed = []
     for user in results:
         observed.append({
@@ -115,7 +115,7 @@ def get_observing_user(userID):
         "b.description as description, "
         "b.role as role, "
         "id(b) as id"
-        "", {'userID': userID})))
+        "", {'userID': int(userID)})))
     observing = []
     for user in results:
         observing.append({
@@ -140,7 +140,7 @@ def get_posts_by_user(userID):
         "p.content as content, "
         "p.update_datetime as update_datetime, "
         "id(p) as id"
-        "", {'userID': userID})))
+        "", {'userID': int(userID)})))
     posts = []
     for post in results:
         posts.append({
@@ -167,7 +167,7 @@ def get_liked_by_user(userID):
         "p.update_datetime as update_datetime, "
         "c.name as author, "
         "id(p) as id"
-        "", {'userID': userID})))
+        "", {'userID': int(userID)})))
     posts = []
     for post in results:
         posts.append({
@@ -194,7 +194,7 @@ def get_disliked_by_user(userID):
         "p.update_datetime as update_datetime, "
         "c.name as author, "
         "id(p) as id"
-        "", {'userID': userID})))
+        "", {'userID': int(userID)})))
     posts = []
     for post in results:
         posts.append({
@@ -221,7 +221,7 @@ def get_posts_by_observed(userID):
         "p.update_datetime as update_datetime, "
         "b.name as author"
         "id(p) as id"
-        "", {'userID': userID})))
+        "", {'userID': int(userID)})))
     posts = []
     for post in results:
         posts.append({
