@@ -248,16 +248,138 @@ def get_posts_by_observed(userID):
         })
     return json.dumps({"posts": posts})
 
-# @app.route("/<userID>/like/<postID>")
-# def like_post(userID, postID):
-#     db = get_db()
-#     results = db.read_transaction(lambda tx: list(tx.run(
-#         "Match (u:User) "
-#         "Match (p:Post) "
-#         "where id(u) = $userID AND id(p) = $postID "
-#         "CREATE (u)-[l:LIKES {datetime: datetime()}]->(p)"
-#         "", {'userID': userID})))
+@app.route("/<userID>/like/<postID>")
+def like_post(userID, postID):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "Match (p:Post) "
+        "where id(u) = $userID AND id(p) = $postID "
+        "AND NOT EXISTS { MATCH (u)-[:AUTHOR_OF]->(p)} "
+        "optional match (u)-[d:DISLIKES]->(p) "
+        "MERGE (u)-[l:LIKES]->(p) "
+        "ON CREATE SET l.datetime = datetime() "
+        "DELETE d "
+        "RETURN id(l) as id"
+        "", {'userID': int(userID), 'postID': int(postID)})))
+    likes = []
+    for like in results:
+        likes.append({
+            'id': like['id'],
+        })
+    return json.dumps({"likes": likes})
 
+@app.route("/<userID>/dislike/<postID>")
+def dislike_post(userID, postID):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "Match (p:Post) "
+        "where id(u) = $userID AND id(p) = $postID "
+        "AND NOT EXISTS { MATCH (u)-[:AUTHOR_OF]->(p)} "
+        "OPTIONAL MATCH (u)-[l:LIKES]->(p) "
+        "MERGE (u)-[d:DISLIKES]->(p) "
+        "ON CREATE SET d.datetime = datetime() "
+        "DELETE l "
+        "RETURN id(d) as id"
+        "", {'userID': int(userID), 'postID': int(postID)})))
+    dislikes = []
+    for dislike in results:
+        dislikes.append({
+            'id': dislike['id'],
+        })
+    return json.dumps({"dislikes": dislikes})
+
+@app.route("/<userID>/observe/<observedID>")
+def observe_user(userID, observedID):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "Match (o:User) "
+        "where id(u) = $userID AND id(o) = $observedID "
+        "AND NOT id(u) = $observedID "
+        "MERGE (u)-[b:OBSERVES]->(o) "
+        "ON CREATE SET b.since = datetime() "
+        "RETURN id(b) as id"
+        "", {'userID': int(userID), 'observedID': int(observedID)})))
+    observations = []
+    for obs in results:
+        observations.append({
+            'id': obs['id']
+        })
+    return json.dumps({"observations": observations})
+
+@app.route("/<userID>/unobserve/<observedID>")
+def unobserve_user(userID, observedID):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "Match (o:User) "
+        "where id(u) = $userID AND id(o) = $observedID "
+        "MATCH (u)-[b:OBSERVES]->(o) "
+        "WITH b, id(b) as identity "
+        "DELETE b "
+        "RETURN identity as id"
+        "", {'userID': int(userID), 'observedID': int(observedID)})))
+    observations = []
+    for obs in results:
+        observations.append({
+            'id': obs['id']
+        })
+    return json.dumps({"observations": observations})
+
+@app.route("/tag/<tagName>")
+def get_posts_from_tag(tagName):
+    db = get_db()
+    results = db.read_transaction(lambda tx: list(tx.run(
+        "Match (p:Post)-[t:TAGGED_AS]->(z:Tag) "
+        "WHERE z.name = $tagName "
+        "MATCH (u:User)-[a:AUTHOR_OF]->(p) "
+        "RETURN p.creation_datetime as creation_datetime, "
+        "id(u) as author, "
+        "p.photo_address as photo_address, "
+        "p.content as content, "
+        "p.update_datetime as update_datetime, "
+        "id(p) as id"
+        "", {'tagName': tagName})))
+    posts = []
+    for post in results:
+        posts.append({
+        'author': post['author'],
+        'creation_datetime': post['creation_datetime'],
+        'photo_address': post['photo_address'],
+        'content': post['content'],
+        'update_datetime': post['update_datetime'],
+        'id': post['id'],
+        })
+    return json.dumps({"posts": posts})
+
+@app.route("/<userID>/recommended-users")
+def recommended_users(userID):
+    db = get_db()
+    results = db.read_transaction(lambda tx: list(tx.run(
+        "Match (u:User)-[o:OBSERVES]->(c:User) "
+        "WHERE id(u) = $userID "
+        "MATCH (c)-[r:OBSERVES]->(b:User) "
+        "WHERE NOT EXISTS { MATCH (u)-[:OBSERVES]->(b)} "
+        "RETURN DISTINCT b.name as name, "
+        "b.creation_datetime as creation_datetime, "
+        "b.avatar as avatar, "
+        "b.description as description, "
+        "b.role as role, "
+        "id(b) as id"
+        "", {'userID': int(userID)})))
+    observed = []
+    for user in results:
+        observed.append({
+        'name': user['name'],
+        'creation_datetime': user['creation_datetime'],
+        'avatar': user['avatar'],
+        'description': user['description'],
+        'role': user['role'],
+        'id': user['id'],
+    })
+    return json.dumps({"observed": observed})
 
 if __name__ == '__main__':
     app.run(debug=True)
