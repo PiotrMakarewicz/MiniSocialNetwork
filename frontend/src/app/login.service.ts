@@ -37,8 +37,9 @@ export class LoginService implements CanActivate {
   }
 
   canActivate() {
-    console.log("Trying to activate. logged in? ", this.isLoggedIn())
-    if (!this.isLoggedIn()){
+    let loggedIn = this.isLoggedIn()
+    console.log("Trying to activate. logged in? ", loggedIn)
+    if (!loggedIn){
       this.router.navigate(['/login']);
       return false;
     }

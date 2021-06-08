@@ -6,8 +6,7 @@ import { LoginService } from './login.service'
 
 const routes: Routes = [
   { path: 'user/:id', component: UserPageComponent, canActivate: [LoginService]},
-  { path: 'login', component: LoginPageComponent},
-  { path: '**', redirectTo: 'login'}
+  { path: 'login', component: LoginPageComponent}
   //   { path: 'user/:id', component: UserPageComponent},
   // { path: 'login', component: LoginPageComponent},
   // { path: '**', redirectTo: 'login'}
