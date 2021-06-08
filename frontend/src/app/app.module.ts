@@ -12,6 +12,7 @@ import { PostListComponent } from './post-list/post-list.component';
 import { UserSmallComponent } from './user-small/user-small.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserPageComponent } from './user-page/user-page.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { UserPageComponent } from './user-page/user-page.component';
     PostListComponent,
     UserSmallComponent,
     UserListComponent,
-    UserPageComponent
+    UserPageComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,

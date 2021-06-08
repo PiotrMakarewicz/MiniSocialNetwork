@@ -62,6 +62,8 @@ def get_user(username):
         "u.role as role"
         "", {'username': username})))
     
+    user = dict()
+
     for result in results:
         user = {
             'name': result['name'],
