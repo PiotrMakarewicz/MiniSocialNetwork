@@ -119,6 +119,21 @@ def get_post(postID):
             })
     return json.dumps({"posts": posts})
 
+@app.route("/post/<postID>/responses")
+def get_responses(postID):
+    db = get_db()
+    results  = db.read_transaction(lambda tx: list(tx.run(
+        "Match (w:Post)-[r:REFERS_TO]->(p:Post) "
+        "where id(p) = $postID "
+        "RETURN id(w) as id"
+        "", {'postID': int(postID)})))
+    posts = []
+    for post in results:
+        posts.append({
+            'id': post['id'],
+            })
+    return json.dumps({"posts": posts})
+
 @app.route("/<userID>/observed")
 def get_observed_by_user(userID):
     db = get_db()
