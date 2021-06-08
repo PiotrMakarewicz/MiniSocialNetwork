@@ -10,6 +10,8 @@ Informacje dot. użytkowników, postów, obserwowania przechowywane w bazie Neo4
 
 ## Model bazy danych
 
+![schema](schema.png)
+
 ### Węzły
 
 - User - użytkownik

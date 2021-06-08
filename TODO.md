@@ -1,9 +1,7 @@
 # TODO
- - dodać schema do bazy oraz obrazek schematu do README (Piotrek)
  - dodać zapytania pozwalające na wykorzystanie potencjału bazy grafowej (nie tylko operacje CRUD)
  - skupić się na zapytaniach i backendzie, frontend jest drugorzędny
  - dodać constrainty (Piotrek)
- - zaimplementować atrybuty relacji w generatorze (Piotrek)
  - dodać zapytania (Gabriel)
  - dodać username dla użytkowników w zapytaniach (Gabriel)
  - dodać przewodnik po kodzie
