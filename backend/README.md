@@ -2,7 +2,7 @@
 
 ## Przed uruchomieniem
 
-Upewnij się, że twoim katalogiem roboczym jest api
+Upewnij się, że twoim katalogiem roboczym jest backend
 
 Stwórz i uruchom wirtualne środowisko dla interpretera Pythona
 
