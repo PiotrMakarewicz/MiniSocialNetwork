@@ -76,21 +76,3 @@ Aby uruchomić i przetestować projekt, należy najpierw wypełnić bazę Neo4j 
 #### (User) - DISLIKES -> (Post)
 
 - datetime
-
-### Zapytania do bazy (realizowane przez backend; wstępny plan)
-
-1. tworzenie użytkownika
-2. dodawanie wpisu/komentarza
-3. edycja wpisu
-4. usuwanie wpisu
-5. ocenianie wpisu
-6. obserwowanie użytkownika
-7. usunięcie z obserwowanych użytkownika
-8. zmiana atrybutu użytkownika
-9. zwrócenie wszystkich wpisów użytkownika
-10. zwrócenie wpisów obserwowanych danego użytkownika
-11. zwrócenie wpisów z określonego tagu
-12. zwrócenie wpisów polubionych przez obserwowanych
-13. pokazanie polecanych postów
-14. pokazanie polecanych znajomych
-15. zwrócenie rankingu popularności użytkowników (np. przez PageRank)
