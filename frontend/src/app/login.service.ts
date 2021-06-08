@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { MD5 } from './md5'
 import { backendAddress} from './global-variables'
-import { Router } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 
-@Injectable()
-export class LoginService {
+@Injectable(
+  {providedIn: 'root'}
+)
+export class LoginService implements CanActivate {
 
   loggedIn: boolean = false;
   userName: string = "";
@@ -28,13 +30,25 @@ export class LoginService {
     }
     else{
       alert("Failed to sign in.");
+      this.loggedIn = false;
       return false;
     }
   }
-  
+
+  canActivate() {
+    console.log("Trying to activate. logged in? ", this.isLoggedIn())
+    if (!this.isLoggedIn()){
+      this.router.navigate(['/login']);
+      return false;
+    }
+    else return true;
+  }
+
+  getUserId(){
+    return this.userId;
+  }
 
   isLoggedIn() {
-
     return this.loggedIn;
   }
 }
