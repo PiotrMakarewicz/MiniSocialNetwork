@@ -241,7 +241,10 @@ def like_post(userID, postID):
         "Match (u:User) "
         "Match (p:Post) "
         "where id(u) = $userID AND id(p) = $postID "
-        "CREATE (u)-[l:LIKES {datetime: datetime()}]->(p) "
+        "optional match (u)-[d:DISLIKES]->(p) "
+        "MERGE (u)-[l:LIKES]->(p) "
+        "ON CREATE SET l.datetime = datetime() "
+        "DELETE d "
         "RETURN id(l) as id"
         "", {'userID': int(userID), 'postID': int(postID)})))
     likes = []
@@ -258,8 +261,11 @@ def dislike_post(userID, postID):
         "Match (u:User) "
         "Match (p:Post) "
         "where id(u) = $userID AND id(p) = $postID "
-        "CREATE (u)-[l:DISLIKES {datetime: datetime()}]->(p) "
-        "RETURN id(l) as id"
+        "OPTIONAL MATCH (u)-[l:LIKES]->(p) "
+        "MERGE (u)-[d:DISLIKES]->(p) "
+        "ON CREATE SET d.datetime = datetime() "
+        "DELETE l "
+        "RETURN id(d) as id"
         "", {'userID': int(userID), 'postID': int(postID)})))
     dislikes = []
     for dislike in results:
