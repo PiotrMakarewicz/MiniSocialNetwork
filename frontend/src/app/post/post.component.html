@@ -1,3 +1,7 @@
-<p>
-  post works!
-</p>
+<div>
+<b>Author:</b> <a [routerLink]="['/user/',authorID]"> {{ authorName }} </a>
+<br>
+{{ content }}
+<br>
+<b>Rating: </b> <button type="button" class="btn btn-success btn-sm" (click)="like()">+</button> {{rating}} <button type="button" class="btn btn-danger btn-sm" (click)="dislike()">-</button>
+</div>

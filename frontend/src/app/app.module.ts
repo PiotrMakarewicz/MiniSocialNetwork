@@ -8,7 +8,6 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { PostComponent } from './post/post.component';
 import { UserSmallComponent } from './user-small/user-small.component';
 import { UserPageComponent } from './user-page/user-page.component';
-import { MainPageComponent } from './main-page/main-page.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
@@ -18,8 +17,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     LoginPageComponent,
     PostComponent,
     UserSmallComponent,
-    UserPageComponent,
-    MainPageComponent
+    UserPageComponent
   ],
   imports: [
     BrowserModule,
