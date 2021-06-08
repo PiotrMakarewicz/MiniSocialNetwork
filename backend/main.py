@@ -234,16 +234,22 @@ def get_posts_by_observed(userID):
         })
     return json.dumps({"posts": posts})
 
-# @app.route("/<userID>/like/<postID>")
-# def like_post(userID, postID):
-#     db = get_db()
-#     results = db.read_transaction(lambda tx: list(tx.run(
-#         "Match (u:User) "
-#         "Match (p:Post) "
-#         "where id(u) = $userID AND id(p) = $postID "
-#         "CREATE (u)-[l:LIKES {datetime: datetime()}]->(p)"
-#         "", {'userID': userID})))
-
+@app.route("/<userID>/like/<postID>")
+def like_post(userID, postID):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "Match (p:Post) "
+        "where id(u) = $userID AND id(p) = $postID "
+        "CREATE (u)-[l:LIKES {datetime: datetime()}]->(p) "
+        "RETURN id(l) as id"
+        "", {'userID': int(userID), 'postID': int(postID)})))
+    likes = []
+    for like in results:
+        likes.append({
+            'id': like['id'],
+        })
+    return json.dumps({"likes": likes})
 
 if __name__ == '__main__':
     app.run(debug=True)
