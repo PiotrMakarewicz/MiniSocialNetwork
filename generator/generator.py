@@ -30,7 +30,7 @@ def create_fake_user() -> dict:
     user = dict()
 
     user['name'] = fake.name()
-    user['creation_date'] = fake.date_time_between('-1y')
+    user['creation_datetime'] = fake.date_time_between('-1y')
     user['description'] = fake.paragraph()
     user['role'] = random.choices(['admin', 'none'], [1, 100])[0]
     user['password_hash'] = uuid.uuid4().hex
@@ -39,10 +39,10 @@ def create_fake_user() -> dict:
     return user
 
 
-def create_fake_post(first_possible_creation_date: datetime, with_photo: bool) -> dict:
+def create_fake_post(first_possible_creation_datetime: datetime, with_photo: bool) -> dict:
     """
     Returns a dictionary representing a Post node that can be later inserted into the database.
-    @param first_possible_creation_date: this is the first possible date of this post. It may be used to create a post for a user registered at a certain day
+    @param first_possible_creation_datetime: this is the first possible date of this post. It may be used to create a post for a user registered at a certain day
     @param with_photo: if true, adds placeholder photo url as photo_address, if false makes photo_address an empty string
     @return: a dictionary with attributes equivalent to the ones of a Post node in the database.
     """
@@ -50,10 +50,8 @@ def create_fake_post(first_possible_creation_date: datetime, with_photo: bool) -
 
     post = dict()
 
-    #post['creation_date'] = fake.date_between(first_possible_creation_date)
-    post['creation_date'] = fake.date_time_between(first_possible_creation_date)
-    
-    post['update_date'] = random.choice([None, fake.date_time_between_dates(post['creation_date'], None)])
+    post['creation_datetime'] = fake.date_time_between(first_possible_creation_datetime)
+    post['update_datetime'] = random.choice([None, fake.date_time_between_dates(post['creation_datetime'], None)])
     post['content'] = fake.paragraph() 
     post['photo_address'] = 'https://via.placeholder.com/500/02f/a0f.png' if with_photo else ''
 
@@ -75,8 +73,8 @@ def add_user(user: dict) -> int:
     @param user: a dictionary with attributes equivalent to the ones of a User node in the database
     @return: a single number, the ID of a newly added user
     """
-    result =  db.run("CREATE (n:User {{name: '{}', creation_date: '{}', avatar: '{}', description: '{}', role: '{}', password_hash: '{}'}}) RETURN id(n)"
-        .format(user['name'], user['creation_date'], user['avatar'], user['description'], user['role'], user['password_hash']))
+    result =  db.run("CREATE (n:User {{name: '{}', creation_datetime: '{}', avatar: '{}', description: '{}', role: '{}', password_hash: '{}'}}) RETURN id(n)"
+        .format(user['name'], user['creation_datetime'], user['avatar'], user['description'], user['role'], user['password_hash']))
     return result.data()[0]['id(n)']
 
 
@@ -87,8 +85,8 @@ def add_post(author_id: int, post: dict) -> int:
     @param post: a dictionary with attributes equivalent to the ones of a Post node in the database
     @return: a single number, the ID of a newly added post
     """
-    result = db.run("CREATE (n:Post {{content: '{}', creation_date: '{}', update_date: '{}', photo_address: '{}'}}) RETURN id(n)"
-        .format(post['content'], post['creation_date'], post['update_date'], post['photo_address']))
+    result = db.run("CREATE (n:Post {{content: '{}', creation_datetime: '{}', update_datetime: '{}', photo_address: '{}'}}) RETURN id(n)"
+        .format(post['content'], post['creation_datetime'], post['update_datetime'], post['photo_address']))
     post_id = result.data()[0]['id(n)']
     result = db.run("MATCH (u:User), (p:Post) WHERE id(u) = {} AND id(p) = {} CREATE (u)-[r:AUTHOR_OF]->(p)"
         .format(author_id, post_id))
@@ -200,7 +198,7 @@ def generate_database():
     for user_id, user in users.items():
         num_posts = random.randint(db_params['min user posts'], db_params['max user posts'])
         for _ in range(num_posts):
-            post = create_fake_post(user['creation_date'], with_photo=(random.uniform(0, 1) > db_params['posts with photos freq']))
+            post = create_fake_post(user['creation_datetime'], with_photo=(random.uniform(0, 1) > db_params['posts with photos freq']))
             post_id = add_post(user_id, post)
             posts[post_id] = post
     
@@ -223,7 +221,7 @@ def generate_database():
 
         for _ in range(25):
             post_id, post = random.choice(list(posts.items()))
-            if post['creation_date'] < datetime:
+            if post['creation_datetime'] < datetime:
                 return post_id
         
         return None
@@ -232,7 +230,7 @@ def generate_database():
     for referring_id, referring_post in posts.items():
         if random.uniform(0, 1) < db_params['referring post chance']:
             while True:
-                referred_id = get_random_post_created_before(referring_post['creation_date'])
+                referred_id = get_random_post_created_before(referring_post['creation_datetime'])
                 if referred_id != referring_id:
                     break
             if referred_id is not None:
