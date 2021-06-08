@@ -90,6 +90,29 @@ def get_user(userID):
         })
     return json.dumps({"users": users})
 
+@app.route("/post/<postID>")
+def get_post(postID):
+    db = get_db()
+    results  = db.read_transaction(lambda tx: list(tx.run(
+        "Match (c:User)-[a:AUTHOR_OF]->(p:Post) "
+        "where id(p) = {} "
+        "RETURN p.creation_datetime as creation_datetime, "
+        "p.photo_address as photo_address, "
+        "p.content as content, "
+        "p.update_datetime as update_datetime, "
+        "id(c) as authorID, "
+        "id(p) as id".format(postID))))
+    posts = []
+    for post in results:
+        posts.append({
+            'author': post['authorID'],
+            'creation_datetime': post['creation_datetime'],
+            'photo_address': post['photo_address'],
+            'content': post['content'],
+            'update_datetime': post['update_datetime'],
+            'id': post['id'],
+            })
+    return json.dumps({"posts": posts})
 
 @app.route("/<userID>/observed")
 def get_observed_by_user(userID):

@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserListComponent } from '../user-list/user-list.component';
 import { UserService } from '../user.service';
 
 @Component({
@@ -23,7 +22,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.sub = this.route.params.subscribe(async params => {
        this.id = + params['id'];
        this.user = await this.userService.getUser(this.id);
-       console.log(this.user);
        this.id = this.user['id'];
        this.imageUrl = this.user['avatar'];
        this.description = this.user['description'];
