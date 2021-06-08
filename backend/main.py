@@ -46,7 +46,31 @@ def get_all_users():
         'description': user['description'],
         'role': user['role'],
     })
-    return Response(json.dumps({"users": users}), mimetype="application/json")
+    return json.dumps({"users": users})
+
+
+@app.route("/<username>")
+def get_user(username):
+    db = get_db()
+    results = db.read_transaction(lambda tx: list(tx.run(
+        "Match (u:User)"
+        "WHERE u.name = $username "
+        "RETURN u.name as name, "
+        "u.creation_datetime as creation_datetime, "
+        "u.avatar as avatar, "
+        "u.description as description, "
+        "u.role as role"
+        "", {'username': username})))
+    
+    for result in results:
+        user = {
+            'name': result['name'],
+            'creation_datetime': result['creation_datetime'],
+            'avatar': result['avatar'],
+            'description': result['description'],
+            'role': result['role'],
+        }   
+    return json.dumps({"user": user})
 
 
 @app.route("/<username>/observed")
@@ -70,7 +94,7 @@ def get_observed_by_user(username):
         'description': user['description'],
         'role': user['role'],
     })
-    return Response(json.dumps({"observed": observed}), mimetype="application/json")
+    return json.dumps({"observed": observed})
 
 
 @app.route("/<username>/observing")
@@ -94,7 +118,7 @@ def get_observing_user(username):
         'description': user['description'],
         'role': user['role'],
     })
-    return Response(json.dumps({"observing": observing}), mimetype="application/json")
+    return json.dumps({"observing": observing})
 
 
 @app.route("/<username>/posts")
@@ -117,7 +141,7 @@ def get_posts_by_user(username):
         'content': post['content'],
         'update_datetime': post['update_datetime']
         })
-    return Response(json.dumps({"posts": posts}), mimetype="application/json")
+    return json.dumps({"posts": posts})
 
 
 @app.route("/<username>/liked")
@@ -142,7 +166,7 @@ def get_liked_by_user(username):
         'content': post['content'],
         'update_datetime': post['update_datetime']
         })
-    return Response(json.dumps({"posts": posts}), mimetype="application/json")
+    return json.dumps({"posts": posts})
 
 
 @app.route("/<username>/disliked")
@@ -167,7 +191,7 @@ def get_disliked_by_user(username):
         'content': post['content'],
         'update_datetime': post['update_datetime']
         })
-    return Response(json.dumps({"posts": posts}), mimetype="application/json")
+    return json.dumps({"posts": posts})
 
 
 @app.route("/<username>/observed/posts")
@@ -192,7 +216,7 @@ def get_posts_by_observed(username):
         'content': post['content'],
         'update_datetime': post['update_datetime']
         })
-    return Response(json.dumps({"posts": posts}), mimetype="application/json")
+    return json.dumps({"posts": posts})
 
 
 if __name__ == '__main__':
