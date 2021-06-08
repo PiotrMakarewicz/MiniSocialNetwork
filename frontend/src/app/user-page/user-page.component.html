@@ -1,4 +1,6 @@
-<img src={{imageUrl}} /> 
+<img src={{imageUrl}} />
 <h1>{{ name }} </h1>
 <p><b>User description:</b> {{ description }}</p>
+<b>Observe: </b> <button type="button" class="btn btn-success btn-sm" (click)="observe()">Obserwuj</button>
+<button type="button" class="btn btn-danger btn-sm" (click)="unobserve()">Odobserwuj</button>
 <app-post [id]=409></app-post>
