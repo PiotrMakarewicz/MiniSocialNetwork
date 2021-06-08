@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { backendAddress } from '../global-variables';
 
 @Component({
   selector: 'app-login-page',
@@ -11,5 +12,7 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  onClick() {
+    alert(backendAddress);
+  }
 }
