@@ -21,8 +21,6 @@ export class LoginPageComponent implements OnInit {
   async onClick() {
     let userName = this.userNameControl.value;
     let password = this.passwordControl.value;
-    let loggedIn = await this.loginService.loginAs(userName, password);
-    if (loggedIn)
-      this.router.navigate(['/main']);
+    await this.loginService.loginAs(userName, password);
   }
 }
