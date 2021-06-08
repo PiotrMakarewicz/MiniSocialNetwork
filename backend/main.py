@@ -55,23 +55,16 @@ def get_all_users():
 def get_user(userID):
     db = get_db()
     results = db.read_transaction(lambda tx: list(tx.run(
-        "Match (u:User {id: $userID})"
+        "Match (u:User)"
+        "where id(u) = {}"
         "RETURN u.name as name, "
         "u.creation_datetime as creation_datetime, "
         "u.avatar as avatar, "
         "u.description as description, "
-<<<<<<< HEAD
         "u.role as role, "
         "id(u) as id"
-        "", {'userID': userID})))
+        "".format(userID))))
     users = []
-=======
-        "u.role as role"
-        "", {'username': username})))
-    
-    user = dict()
-
->>>>>>> 0f18cfeb4ad8ceff779f77733059459290ceffa2
     for result in results:
         users.append({
             'name': result['name'],
