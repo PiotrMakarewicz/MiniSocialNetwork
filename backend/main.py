@@ -314,5 +314,31 @@ def unobserve_user(userID, observedID):
         })
     return json.dumps({"observations": observations})
 
+@app.route("/tag/<tagName>")
+def get_posts_from_tag(tagName):
+    db = get_db()
+    results = db.read_transaction(lambda tx: list(tx.run(
+        "Match (p:Post)-[t:TAGGED_AS]->(z:Tag) "
+        "WHERE z.name = $tagName "
+        "MATCH (u:User)-[a:AUTHOR_OF]->(p) "
+        "RETURN p.creation_datetime as creation_datetime, "
+        "id(u) as author, "
+        "p.photo_address as photo_address, "
+        "p.content as content, "
+        "p.update_datetime as update_datetime, "
+        "id(p) as id"
+        "", {'tagName': tagName})))
+    posts = []
+    for post in results:
+        posts.append({
+        'author': post['author'],
+        'creation_datetime': post['creation_datetime'],
+        'photo_address': post['photo_address'],
+        'content': post['content'],
+        'update_datetime': post['update_datetime'],
+        'id': post['id'],
+        })
+    return json.dumps({"posts": posts})
+
 if __name__ == '__main__':
     app.run(debug=True)
