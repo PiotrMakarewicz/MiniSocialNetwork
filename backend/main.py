@@ -381,5 +381,57 @@ def recommended_users(userID):
     })
     return json.dumps({"observed": observed})
 
+@app.route("/ranking")
+def get_user_ranking():
+    db = get_db()
+    results = db.read_transaction(lambda tx: list(tx.run(
+        "CALL gds.pageRank.stream( "
+        "{nodeQuery: 'MATCH (u:User) RETURN id(u) AS id', "
+        "relationshipQuery: 'MATCH (b:User)-[:OBSERVES]->(c:User) "
+        "RETURN id(b) AS source, id(c) AS target'}"
+        ") "
+        "YIELD nodeId, score "
+        "RETURN gds.util.asNode(nodeId).name as name, score, "
+        "nodeId as id "
+        "ORDER BY score DESC, name ASC"
+        "")))
+    ranking = []
+    for user in results:
+        ranking.append({
+        'name': user['name'],
+        'id': user['id'],
+        'score': user['score']
+    })
+    return json.dumps({"ranking": ranking})
+
+@app.route("/<userID>/recommended-posts")
+def get_recommended_posts(userID):
+    db = get_db()
+    results = db.read_transaction(lambda tx: list(tx.run(
+        "Match (u:User)-[o:OBSERVES]->(b:User) "
+        "Match (b)-[a:LIKES]->(p:Post) "
+        "Match (c:User)-[d:AUTHOR_OF]->(p) "
+        "where id(u) = $userID "
+        "RETURN DISTINCT p.creation_datetime as creation_datetime, "
+        "p.photo_address as photo_address, "
+        "p.content as content, "
+        "p.update_datetime as update_datetime, "
+        "id(c) as author, "
+        "id(p) as id "
+        "ORDER BY creation_datetime DESC"
+        "", {'userID': int(userID)})))
+    posts = []
+    for post in results:
+        posts.append({
+        'author': post['author'],
+        'creation_datetime': post['creation_datetime'],
+        'photo_address': post['photo_address'],
+        'content': post['content'],
+        'update_datetime': post['update_datetime'],
+        'id': post['id'],
+        })
+    return json.dumps({"posts": posts})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
