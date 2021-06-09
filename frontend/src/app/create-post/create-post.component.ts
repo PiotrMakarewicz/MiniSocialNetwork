@@ -22,6 +22,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(async params => {
       this.params = params;
+      console.log(this.params);
+      this.postID = params['refferring_id']
        
     });
   }
@@ -46,8 +48,9 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     }
     let response = await fetch(address);
     let json = await response.json();
-    let postFrom = json[0]['id'];
     console.log(json);
+    let postFrom = json['posts'][0]['id'];
+    
     if (this.postID) {
       this.respondToPost(postFrom);
     }
