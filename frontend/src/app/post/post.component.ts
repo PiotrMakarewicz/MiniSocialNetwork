@@ -67,14 +67,14 @@ export class PostComponent implements OnInit {
 
   async like() {
     let user = await this.loginService.getUserId();
-    let result = await fetch(backendAddress + ''+user+'/like/'+this.id);
+    let result = await fetch(backendAddress +user+'/like/'+this.id);
 
     console.log('like')
     await this.update();
   }
   async dislike() {
     let user = await this.loginService.getUserId();
-    let result = await fetch(backendAddress + ''+user+'/dislike/'+this.id);
+    let result = await fetch(backendAddress +user+'/dislike/'+this.id);
     let json = await result.json();
     console.log(json);
     console.log('dislike')

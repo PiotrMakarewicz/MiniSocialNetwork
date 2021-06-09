@@ -15,9 +15,6 @@ import { UsersIMightWantToObserveComponent } from './users-imight-want-to-observ
 import { CreatePostComponent } from './create-post/create-post.component';
 
 const routes: Routes = [
-  // { path: 'user/:id', component: UserPageComponent, canActivate: [LoginService]},
-  // { path: 'login', component: LoginPageComponent},
-  // { path: 'tag/:tagname', component: TagPageComponent, canActivate: [LoginService]}
   { path: 'user/:id', component: UserPageComponent, canActivate: [LoginService]},
   { path: 'login', component: LoginPageComponent},
   { path: 'tag/:tagname', component: TagPageComponent, canActivate: [LoginService]},
