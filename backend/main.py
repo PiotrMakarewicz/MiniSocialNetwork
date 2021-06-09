@@ -110,10 +110,10 @@ def get_post(postID):
     for post in results:
         posts.append({
             'author': post['authorID'],
-            'creation_datetime': post['creation_datetime'],
+            'creation_datetime': str(post['creation_datetime']),
             'photo_address': post['photo_address'],
             'content': post['content'],
-            'update_datetime': post['update_datetime'],
+            'update_datetime': str(post['update_datetime']),
             'rating': post['rating'],
             'id': post['id'],
             })
