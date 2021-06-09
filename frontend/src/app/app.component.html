@@ -1,2 +1,17 @@
-<h1 style="margin: 25 25 25 25; color:white; background-color: blue;">MiniSocialNetwork</h1>
+<header style="margin: 25 25 25 25; color:white; background-color: blue;">
+    <h1 >MiniSocialNetwork</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <a class="nav-link" [routerLink]="['myprofile']">My profile</a>
+        <a class="nav-link" [routerLink]="['users-iobserve']">Users I observe</a>
+        <a class="nav-link" [routerLink]="['users-imight-want-to-observe']">Users I might want to observe</a>
+        <a class="nav-link" [routerLink]="['influential-users']">The most influential users</a>
+        <a class="nav-link" [routerLink]="['posts-ilike']">Posts I like</a>
+        <a class="nav-link" [routerLink]="['posts-idislike']">Posts I dislike</a>
+        <a class="nav-link" [routerLink]="['latest-posts']">The latest posts</a>
+        <a class="nav-link" [routerLink]="['posts-interesting']">Posts I might find interesting</a>
+
+    </div>
+  </nav>
+</header>
 <router-outlet></router-outlet>

@@ -27,16 +27,24 @@ export class LoginService implements CanActivate {
       this.passwordHash = MD5(password);
       alert("Logged in as " + this.userName + ".");
       this.router.navigate(['/user/'+ this.userId])
-      return true;
     }
     else{
       alert("Failed to sign in.");
       this.loggedIn = false;
-      return false;
     }
+    localStorage.setItem('loggedIn', String(this.loggedIn));
+    localStorage.setItem('userName', String(this.userName));
+    localStorage.setItem('userId', String(this.userId));
+    localStorage.setItem('passwordHash', String(this.passwordHash));
+    return Boolean(json['id'])
   }
 
   canActivate() {
+    this.loggedIn = Boolean(localStorage.getItem('loggedIn') == "true");
+    this.userName = String(localStorage.getItem('userName'))
+    this.passwordHash = String(localStorage.getItem('passwordHash'));
+    this.userId = Number(localStorage.getItem('userId'))
+
     let loggedIn = this.isLoggedIn()
     console.log("Trying to activate. logged in? ", loggedIn)
     if (!loggedIn){

@@ -19,22 +19,38 @@ export class UserPageComponent implements OnInit, OnDestroy {
   @Output() user: any;
   observeLink: any;
   unobserveLink: any;
+  @Output() observed: boolean = false;
   @Output() posts: any;
+  params: any;
+  @Output() isNotLoggedInUser: any = false;
 
   constructor(private route: ActivatedRoute, private userService: UserService, private loginService: LoginService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(async params => {
-       this.id = + params['id'];
-       this.user = await this.userService.getUser(this.id);
-       this.id = this.user['id'];
-       this.imageUrl = this.user['avatar'];
-       this.description = this.user['description'];
-       this.name = this.user['name'];
-       this.observeLink = backendAddress + this.loginService.getUserId() + "/observe/" + this.id;
-       this.unobserveLink = backendAddress + this.loginService.getUserId() + "/observe/" + this.id;
-       this.posts = (await (await fetch(backendAddress+this.id+'/posts')).json())['posts']
+      this.params = params;
+       await this.update();
     });
+  }
+
+  async update(){
+    this.id = + this.params['id'];
+    this.user = await this.userService.getUser(this.id);
+    this.id = this.user['id'];
+    this.imageUrl = this.user['avatar'];
+    this.description = this.user['description'];
+    this.name = this.user['name'];
+    this.observeLink = backendAddress + this.loginService.getUserId() + "/observe/" + this.id;
+    this.unobserveLink = backendAddress + this.loginService.getUserId() + "/observe/" + this.id;
+    this.posts = (await (await fetch(backendAddress+this.id+'/posts')).json())['posts'];
+    let observed_users = (await (await fetch(backendAddress+this.loginService.getUserId()+'/observed')).json())['observed'];
+    this.observed = false;
+    this.isNotLoggedInUser = !(this.id == this.loginService.getUserId());
+    for (let user of observed_users){
+      if (user['id'] == this.id){
+        this.observed = true; break;
+      }
+    } 
   }
 
   ngOnDestroy() {
@@ -44,13 +60,13 @@ export class UserPageComponent implements OnInit, OnDestroy {
   async observe() {
     let result = await fetch(this.observeLink);
 
-    console.log('observe')
-    //await this.update();
+    console.log('observe');
+    await this.update();
   }
   async unobserve() {
     let result = await fetch(this.unobserveLink);
-    console.log('unobserve')
-    //await this.update();
+    console.log('unobserve');
+    await this.update();
   }
 
 }
