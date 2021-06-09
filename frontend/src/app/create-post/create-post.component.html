@@ -1,1 +1,10 @@
-<p>create-post works!</p>
+<b>Add post:</b>
+<form> 
+  <label for="inputContent" class="sr-only">Content</label>
+  <input type="text" id="inputContent" class="form-control" placeholder="Content" [formControl]="contentControl" required autofocus>
+  <label for="inputPhoto" class="sr-only">Photo Address</label>
+  <input type="text" id="inputPhoto" class="form-control" placeholder="Photo address" [formControl]="photoControl" required>
+  <label for="inputTab" class="sr-only">Tag</label>
+  <input type="text" id="inputTag" class="form-control" placeholder="Tag" [formControl]="tagControl" >
+  <button (click)="onClick()" class="btn btn-lg btn-primary btn-block" type="submit">Create post</button>
+</form>
