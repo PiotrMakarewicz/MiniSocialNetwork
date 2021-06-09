@@ -583,8 +583,8 @@ def respond_to_post(postID, postID2):
         "Match (o:Post) "
         "WHERE id(o) = $postID2 "
         "MERGE (p)-[r:REFERS_TO]->(o) "
-        "RETURN id(r)"
-        "", {'postID': int(postID), 'postID2': int(postID)})))
+        "RETURN id(r) as id"
+        "", {'postID': int(postID), 'postID2': int(postID2)})))
     relations = []
     for rel in results:
         relations.append({
