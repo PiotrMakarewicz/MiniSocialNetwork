@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../login.service';
+import { backendAddress} from '../global-variables';
 
 @Component({
   selector: 'app-users-iobserve',
@@ -8,10 +9,14 @@ import { LoginService } from '../login.service';
 })
 export class UsersIObserveComponent implements OnInit {
 
+  users: any[] = [];
   constructor(private loginService: LoginService) { }
 
-  ngOnInit(): void {
-
+  async ngOnInit() {
+    const userid = this.loginService.getUserId();
+    const response = await fetch(backendAddress+userid+'/observed');
+    const json = await response.json();
+    this.users = json['observed']
   }
 
 }

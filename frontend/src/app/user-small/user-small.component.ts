@@ -25,7 +25,7 @@ export class UserSmallComponent implements OnInit {
       this.user = json['users'][0];
       this.name = this.user['name'];
       this.imageUrl = this.user['imageUrl'];
-      this.address = backendAddress + this.id;
+      this.address = 'user/' + this.id;
       return json['users'][0]
     }
   }

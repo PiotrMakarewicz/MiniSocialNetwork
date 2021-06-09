@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../login.service';
+import { backendAddress } from '../global-variables';
 
 @Component({
   selector: 'app-users-imight-want-to-observe',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersIMightWantToObserveComponent implements OnInit {
 
-  constructor() { }
+  users: any[] = [];
+  constructor(private loginService: LoginService) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    const userid = this.loginService.getUserId();
+    const response = await fetch(backendAddress+userid+'/recommended-users');
+    const json = await response.json();
+    this.users = json['observed']
   }
 
 }
