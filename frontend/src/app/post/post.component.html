@@ -8,5 +8,7 @@
 <b>Tags:</b><span *ngFor="let tagname of tags"> <a [routerLink]="['/tag/',tagname]">{{ tagname }}</a>, </span>
 <br>
 <b>Rating: </b> <button type="button" class="btn btn-success btn-sm" (click)="like()">+</button> {{rating}} <button type="button" class="btn btn-danger btn-sm" (click)="dislike()">-</button>
+<a class="nav-link" [routerLink]="['/create-post', id]">Add answer</a>
+
 <app-post *ngFor="let response of responses" [id]="response"></app-post>
 </div>

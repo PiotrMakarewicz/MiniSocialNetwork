@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { backendAddress } from '../global-variables'
 import { LoginService } from '../login.service';
 import { UserService } from '../user.service';
@@ -8,9 +9,9 @@ import { UserService } from '../user.service';
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css']
 })
-export class PostComponent implements OnInit {
+export class PostComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() id: any;
+  @Input() @Output() id: any;
   @Output() authorName: any = 0;
   @Output() authorID: any = 0;
   @Output() authorPhotoUrl: any = "";
@@ -19,8 +20,9 @@ export class PostComponent implements OnInit {
   @Output() photoUrl: any = "";
   @Output() tags: any = [];
   @Output() responses: any = [];
+  sub: any;
 
-  constructor(private userService: UserService, private loginService: LoginService) { }
+  constructor(private userService: UserService, private loginService: LoginService, private route: ActivatedRoute) { }
 
   async getPost() {
     if (this.id) {
@@ -47,8 +49,23 @@ export class PostComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.sub = this.route.params.subscribe(async params => {
+       await this.update();
+       await this.getResponses();
+    });
     await this.update();
     await this.getResponses();
+  }
+
+  async ngOnChanges(){
+    await this.update();
+    await this.getResponses();
+  }
+
+  ngOnDestroy(){
+    if (this.sub){
+      this.sub.unsubscribe();
+    }
   }
 
   async update() {

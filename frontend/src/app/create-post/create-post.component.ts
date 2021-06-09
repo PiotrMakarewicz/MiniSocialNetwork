@@ -10,12 +10,24 @@ import { FormControl } from '@angular/forms';
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.css']
 })
-export class CreatePostComponent implements OnInit {
+export class CreatePostComponent implements OnInit, OnDestroy {
   @Input() postID: any;
 
   contentControl = new FormControl('');
   photoControl = new FormControl('');
   tagControl = new FormControl('');
+  sub:any;
+  params: any;
+
+  ngOnInit(): void {
+    this.sub = this.route.params.subscribe(async params => {
+      this.params = params;
+       
+    });
+  }
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
 
   async respondToPost(postFrom: any) {
     console.log('respond-post');
@@ -43,8 +55,7 @@ export class CreatePostComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private userService: UserService, private loginService: LoginService) { }
 
-  ngOnInit(): void {
-  }
+
 
   async onClick() {
     let content = this.contentControl.value;

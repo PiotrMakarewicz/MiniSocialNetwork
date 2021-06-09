@@ -33,6 +33,11 @@ export class UserPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
+
   async update(){
     this.id = + this.params['id'];
     this.user = await this.userService.getUser(this.id);
@@ -53,9 +58,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
     } 
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
 
   async observe() {
     let result = await fetch(this.observeLink);

@@ -13,7 +13,7 @@ export class PostsInterestingComponent implements OnInit {
 
   async ngOnInit() {
     let userid = this.loginService.getUserId();
-    this.posts = (await (await fetch(backendAddress+'last-posts')).json())['posts'];
+    this.posts = (await (await fetch(backendAddress+'')).json())['posts'];
   }
 
 }

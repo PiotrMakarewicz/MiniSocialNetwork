@@ -27,7 +27,8 @@ const routes: Routes = [
   { path: 'posts-interesting', component: PostsInterestingComponent, canActivate: [LoginService]},
   { path: 'users-imight-want-to-observe', component: UsersIMightWantToObserveComponent, canActivate: [LoginService]},
   { path: 'tag/:tagname', component: TagPageComponent, canActivate: [LoginService]},
-  { path: 'create-post', component: CreatePostComponent, canActivate: [LoginService]}
+  { path: 'create-post', component: CreatePostComponent, canActivate: [LoginService]},
+  { path: 'create-post/:refferring_id', component: CreatePostComponent, canActivate: [LoginService]},
 ];
 
 @NgModule({
