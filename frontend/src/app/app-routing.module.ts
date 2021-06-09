@@ -29,8 +29,8 @@ const routes: Routes = [
   { path: 'latest-posts', component: LatestPostsComponent, canActivate: [LoginService]},
   { path: 'posts-interesting', component: PostsInterestingComponent, canActivate: [LoginService]},
   { path: 'users-imight-want-to-observe', component: UsersIMightWantToObserveComponent, canActivate: [LoginService]},
-  { path: 'tag/:tagname', component: TagPageComponent},
-  { path: 'user/:id/create-post', component: CreatePostComponent}
+  { path: 'tag/:tagname', component: TagPageComponent, canActivate: [LoginService]},
+  { path: 'create-post', component: CreatePostComponent, canActivate: [LoginService]}
 ];
 
 @NgModule({
