@@ -573,7 +573,30 @@ def get_last_posts():
         'id': post['id'],
         })
     return json.dumps({"posts": posts})
-        
+
+@app.route("/post/<postID>/respond/<postID2>")
+def respond_to_post(postID, postID2):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (p:Post) "
+        "WHERE id(p) = $postID "
+        "Match (o:Post) "
+        "WHERE id(o) = $postID2 "
+        "MERGE (p)-[r:REFERS_TO]->(o) "
+        "RETURN id(r)"
+        "", {'postID': int(postID), 'postID2': int(postID)})))
+    relations = []
+    for rel in results:
+        relations.append({
+        #'author': post['author'],
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
+        'id': rel['id'],
+        })
+    return json.dumps({"relations": relations})
+    
 
 
 if __name__ == '__main__':
