@@ -17,6 +17,14 @@ export class CreatePostComponent implements OnInit {
   photoControl = new FormControl('');
   tagControl = new FormControl('');
 
+  async respondToPost(postFrom: any) {
+    console.log('respond-post');
+    let address = backendAddress + "post/" + postFrom + "/respond/" + this.postID;
+    let response = await fetch(address);
+    let json = await response.json();
+    console.log(json);
+  }
+
   async addPost(content: string, photoAddress: string, tag: string) {
     console.log('create-post');
     let user = this.loginService.getUserId();
@@ -26,7 +34,11 @@ export class CreatePostComponent implements OnInit {
     }
     let response = await fetch(address);
     let json = await response.json();
+    let postFrom = json[0]['id'];
     console.log(json);
+    if (this.postID) {
+      this.respondToPost(postFrom);
+    }
   }
 
   constructor(private route: ActivatedRoute, private userService: UserService, private loginService: LoginService) { }
