@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
+import { backendAddress } from '../global-variables';
+import { LoginService } from '../login.service';
 
 @Component({
   selector: 'app-latest-posts',
@@ -6,10 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./latest-posts.component.css']
 })
 export class LatestPostsComponent implements OnInit {
+  constructor(private loginService: LoginService) { }
+  @Output() posts: any = [];
 
-  constructor() { }
-
-  ngOnInit(): void {
+  async ngOnInit() {
+    let userid = this.loginService.getUserId();
+    this.posts = (await (await fetch(backendAddress+'last-posts')).json())['posts'];
   }
 
 }
