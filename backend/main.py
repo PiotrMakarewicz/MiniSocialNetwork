@@ -495,6 +495,86 @@ def get_recommended_posts(userID):
         })
     return json.dumps({"posts": posts})
 
+@app.route("/user/<userID>/add/<content>/<photoAddress>")
+def add_post_no_tag(userID, content, photoAddress):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "where id(u) = $userID "
+        "CREATE (p:Post {content: $content, photo_address: $photoAddress, creation_datetime: datetime()}) "
+        "CREATE (u)-[a:AUTHOR_OF]->(p) "
+        "SET a.datetime = datetime() "
+        "RETURN p.creation_datetime as creation_datetime, "
+        "p.photo_address as photo_address, "
+        "p.content as content, "
+        "p.update_datetime as update_datetime, "
+        "id(u) as author, "
+        "id(p) as id "
+        "", {'userID': int(userID), 'content': content, 'photoAddress': photoAddress})))
+    posts = []
+    for post in results:
+        posts.append({
+        #'author': post['author'],
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
+        'id': post['id'],
+        })
+    return json.dumps({"posts": posts})
+
+@app.route("/user/<userID>/add/<content>/<photoAddress>/<tag>")
+def add_post_with_tag(userID, content, photoAddress, tag):
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (u:User) "
+        "where id(u) = $userID "
+        "MERGE (t:tag {name: $tag}) "
+        "CREATE (p:Post {content: $content, photo_address: $photoAddress, creation_datetime: datetime()}) "
+        "CREATE (u)-[a:AUTHOR_OF]->(p) "
+        "SET a.datetime = datetime() "
+        "CREATE (p)-[w:TAGGED_AS]->(t) "
+        "RETURN p.creation_datetime as creation_datetime, "
+        "p.photo_address as photo_address, "
+        "p.content as content, "
+        "p.update_datetime as update_datetime, "
+        "id(u) as author, "
+        "id(p) as id "
+        "", {'userID': int(userID), 'content': content, 'photoAddress': photoAddress, 'tag': tag})))
+    posts = []
+    for post in results:
+        posts.append({
+        #'author': post['author'],
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
+        'id': post['id'],
+        })
+    return json.dumps({"posts": posts})
+
+@app.route("/last-posts")
+def get_last_posts():
+    db = get_db()
+    results = db.write_transaction(lambda tx: list(tx.run(
+        "Match (p:Post) "
+        "WHERE duration.inDays(datetime(p.creation_datetime), datetime()).days < 8 "
+        "RETURN id(p) as id "
+        "ORDER BY p.creation_datetime DESC LIMIT 25"
+        "")))
+    posts = []
+    for post in results:
+        posts.append({
+        #'author': post['author'],
+        #'creation_datetime': post['creation_datetime'],
+        #'photo_address': post['photo_address'],
+        #'content': post['content'],
+        #'update_datetime': post['update_datetime'],
+        'id': post['id'],
+        })
+    return json.dumps({"posts": posts})
+        
+
 
 if __name__ == '__main__':
     app.run(debug=True)

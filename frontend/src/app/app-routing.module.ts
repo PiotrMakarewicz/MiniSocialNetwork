@@ -12,6 +12,7 @@ import { PostsIDislikeComponent } from './posts-idislike/posts-idislike.componen
 import { LatestPostsComponent } from './latest-posts/latest-posts.component';
 import { PostsInterestingComponent } from './posts-interesting/posts-interesting.component';
 import { UsersIMightWantToObserveComponent } from './users-imight-want-to-observe/users-imight-want-to-observe.component';
+import { CreatePostComponent } from './create-post/create-post.component';
 
 const routes: Routes = [
   // { path: 'user/:id', component: UserPageComponent, canActivate: [LoginService]},
@@ -27,7 +28,9 @@ const routes: Routes = [
   { path: 'posts-idislike', component: PostsIDislikeComponent, canActivate: [LoginService]},
   { path: 'latest-posts', component: LatestPostsComponent, canActivate: [LoginService]},
   { path: 'posts-interesting', component: PostsInterestingComponent, canActivate: [LoginService]},
-  { path: 'users-imight-want-to-observe', component: UsersIMightWantToObserveComponent, canActivate: [LoginService]}
+  { path: 'users-imight-want-to-observe', component: UsersIMightWantToObserveComponent, canActivate: [LoginService]},
+  { path: 'tag/:tagname', component: TagPageComponent},
+  { path: 'user/:id/create-post', component: CreatePostComponent}
 ];
 
 @NgModule({
