@@ -18,6 +18,7 @@ import { PostsILikeComponent } from './posts-ilike/posts-ilike.component';
 import { PostsIDislikeComponent } from './posts-idislike/posts-idislike.component';
 import { LatestPostsComponent } from './latest-posts/latest-posts.component';
 import { PostsInterestingComponent } from './posts-interesting/posts-interesting.component';
+import { CreatePostComponent } from './create-post/create-post.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { PostsInterestingComponent } from './posts-interesting/posts-interesting
     PostsILikeComponent,
     PostsIDislikeComponent,
     LatestPostsComponent,
-    PostsInterestingComponent
+    PostsInterestingComponent,
+    CreatePostComponent
   ],
   imports: [
     BrowserModule,
