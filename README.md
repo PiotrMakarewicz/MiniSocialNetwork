@@ -20,7 +20,7 @@ Poszczególne programy mają swoje instrukcje uruchomienia we własnych folderac
 
 ## Uruchomienie i testowanie projektu
 
-Aby uruchomić i przetestować projekt, należy najpierw wypełnić bazę Neo4j za pomocą generatora. Następnie należy uruchomić backend i na końcu frontend. We frontendzie należy się zalogować z nazwą użytkownika "Userof Minisocialnetwork" i hasłem "password".
+Aby uruchomić i przetestować projekt, należy najpierw wypełnić bazę Neo4j za pomocą generatora. Do bazy trzeba dodać plugin "Graph Data Science Library", aby móc skorzystać z algorytmu PageRank. Następnie należy uruchomić backend i na końcu frontend. We frontendzie należy się zalogować z nazwą użytkownika "Userof Minisocialnetwork" i hasłem "password".
 
 ## Model bazy danych
 

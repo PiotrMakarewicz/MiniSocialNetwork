@@ -24,7 +24,7 @@ export class UserSmallComponent implements OnInit {
       const json = await result.json();
       this.user = json['users'][0];
       this.name = this.user['name'];
-      this.imageUrl = this.user['imageUrl'];
+      this.imageUrl = this.user['avatar'];
       this.address = 'user/' + this.id;
       return json['users'][0]
     }
