@@ -85,7 +85,8 @@ export class PostComponent implements OnInit, OnChanges, OnDestroy {
   async like() {
     let user = await this.loginService.getUserId();
     let result = await fetch(backendAddress +user+'/like/'+this.id);
-
+    let json = await result.json();
+    console.log(json);
     console.log('like')
     await this.update();
   }

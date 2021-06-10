@@ -2,9 +2,9 @@
 <h1>{{ name }} </h1>
 <p><b>User description:</b> {{ description }}</p>
 <!-- <div *ngIf="isNotLoggedInUser"> -->
-    <ng-template *ngIf="observed; else elseBlock">
+    <div *ngIf="observed; else elseBlock">
         <button type="button" class="btn btn-danger btn-sm" (click)="unobserve()">Unobserve</button>
-    </ng-template>
+    </div>
     <ng-template #elseBlock>
         <button type="button" class="btn btn-success btn-sm" (click)="observe()">Observe</button>
     </ng-template>

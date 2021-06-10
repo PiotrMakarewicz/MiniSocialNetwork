@@ -302,7 +302,7 @@ def like_post(userID, postID):
         "Match (u:User) "
         "Match (p:Post) "
         "where id(u) = $userID AND id(p) = $postID "
-        "AND NOT EXISTS { MATCH (u)-[:AUTHOR_OF]->(p)} "
+        # "AND NOT EXISTS { MATCH (u)-[:AUTHOR_OF]->(p)} "
         "optional match (u)-[d:DISLIKES]->(p) "
         "MERGE (u)-[l:LIKES]->(p) "
         "ON CREATE SET l.datetime = datetime() "
@@ -314,6 +314,7 @@ def like_post(userID, postID):
         likes.append({
             'id': like['id'],
         })
+    print(likes)
     return json.dumps({"likes": likes})
 
 @app.route("/<userID>/dislike/<postID>")
@@ -323,7 +324,7 @@ def dislike_post(userID, postID):
         "Match (u:User) "
         "Match (p:Post) "
         "where id(u) = $userID AND id(p) = $postID "
-        "AND NOT EXISTS { MATCH (u)-[:AUTHOR_OF]->(p)} "
+        # "AND NOT EXISTS { MATCH (u)-[:AUTHOR_OF]->(p)} "
         "OPTIONAL MATCH (u)-[l:LIKES]->(p) "
         "MERGE (u)-[d:DISLIKES]->(p) "
         "ON CREATE SET d.datetime = datetime() "
@@ -335,6 +336,7 @@ def dislike_post(userID, postID):
         dislikes.append({
             'id': dislike['id'],
         })
+    print(dislikes)
     return json.dumps({"dislikes": dislikes})
 
 @app.route("/<userID>/observe/<observedID>")
