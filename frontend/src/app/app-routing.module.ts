@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: 'login', component: LoginPageComponent},
   { path: 'tag/:tagname', component: TagPageComponent, canActivate: [LoginService]},
   { path: 'myprofile', component: MyProfileComponent, canActivate: [LoginService]},
+  { path: '', pathMatch: 'full', component: MyProfileComponent, canActivate: [LoginService]},
   { path: 'users-iobserve', component: UsersIObserveComponent, canActivate: [LoginService]},
   { path: 'influential-users', component: InfluentialUsersComponent, canActivate: [LoginService]},
   { path: 'posts-ilike', component: PostsILikeComponent, canActivate: [LoginService]},
